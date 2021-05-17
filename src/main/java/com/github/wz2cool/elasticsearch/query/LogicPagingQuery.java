@@ -1,10 +1,16 @@
 package com.github.wz2cool.elasticsearch.query;
 
+import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
+import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetLongPropertyFunction;
+import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import com.github.wz2cool.elasticsearch.model.UpDown;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
-import org.springframework.data.elasticsearch.core.ResultsMapper;
+import org.springframework.data.elasticsearch.core.SearchResultMapper;
+
+import java.util.function.BiConsumer;
 
 public class LogicPagingQuery<T> {
 
@@ -13,10 +19,11 @@ public class LogicPagingQuery<T> {
     private final SortOrder sortOrder;
     private final GetLongPropertyFunction<T> pagingPropertyFunc;
     private QueryBuilder queryBuilder;
-    private ResultsMapper resultsMapper;
     private int pageSize = 10;
     private Long lastStartPageId;
     private Long lastEndPageId;
+    private HighlightResultMapper highlightResultMapper = new HighlightResultMapper();
+    private HighlightBuilder highlightBuilder = new HighlightBuilder();
 
     private LogicPagingQuery(Class<T> clazz, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
         this.clazz = clazz;
@@ -28,6 +35,19 @@ public class LogicPagingQuery<T> {
     public static <T> LogicPagingQuery<T> createQuery(
             Class<T> clazz, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
         return new LogicPagingQuery<>(clazz, pagingPropertyFunc, sortOrder, upDown);
+    }
+
+    public LogicPagingQuery<T> scoreMapping(BiConsumer<T, Float> setScorePropertyFunc) {
+        highlightResultMapper.registerScoreMapping(this.clazz, setScorePropertyFunc);
+        return this;
+    }
+
+    public LogicPagingQuery<T> highlightMapping(GetPropertyFunction<T, String> getSearchPropertyFunc,
+                                                BiConsumer<T, String> setHighLightPropertyFunc) {
+        String propertyName = CommonsHelper.getPropertyName(getSearchPropertyFunc);
+        highlightBuilder.field(propertyName);
+        highlightResultMapper.registerHitMapping(this.clazz, getSearchPropertyFunc, setHighLightPropertyFunc);
+        return this;
     }
 
     public QueryBuilder getQueryBuilder() {
@@ -78,12 +98,20 @@ public class LogicPagingQuery<T> {
         this.lastEndPageId = lastEndPageId;
     }
 
-    public ResultsMapper getResultsMapper() {
-        return resultsMapper;
+    public HighlightResultMapper getHighlightResultMapper() {
+        return highlightResultMapper;
     }
 
-    public void setResultsMapper(ResultsMapper resultsMapper) {
-        this.resultsMapper = resultsMapper;
+    public void setHighlightResultMapper(HighlightResultMapper highlightResultMapper) {
+        this.highlightResultMapper = highlightResultMapper;
+    }
+
+    public HighlightBuilder getHighlightBuilder() {
+        return highlightBuilder;
+    }
+
+    public void setHighlightBuilder(HighlightBuilder highlightBuilder) {
+        this.highlightBuilder = highlightBuilder;
     }
 }
 

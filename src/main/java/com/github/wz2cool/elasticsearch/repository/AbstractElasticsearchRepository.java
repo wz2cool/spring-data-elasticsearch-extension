@@ -55,10 +55,11 @@ public abstract class AbstractElasticsearchRepository<T> {
         esQuery.withPageable(PageRequest.of(0, queryPageSize));
         esQuery.withSort(SortBuilders.fieldSort(getPropertyName(logicPagingQuery.getPagingPropertyFunc()))
                 .order(logicPagingQuery.getSortOrder()));
+        esQuery.withHighlightBuilder(logicPagingQuery.getHighlightBuilder());
         AggregatedPage<T> ts;
-        if (Objects.nonNull(logicPagingQuery.getResultsMapper())) {
+        if (Objects.nonNull(logicPagingQuery.getHighlightResultMapper())) {
             ts = getElasticsearchTemplate().queryForPage(
-                    esQuery.build(), logicPagingQuery.getClazz(), logicPagingQuery.getResultsMapper());
+                    esQuery.build(), logicPagingQuery.getClazz(), logicPagingQuery.getHighlightResultMapper());
         } else {
             ts = getElasticsearchTemplate().queryForPage(
                     esQuery.build(), logicPagingQuery.getClazz());
@@ -80,6 +81,8 @@ public abstract class AbstractElasticsearchRepository<T> {
                 UpDown.NONE);
         resetPagingQuery.setPageSize(logicPagingQuery.getPageSize());
         resetPagingQuery.setQueryBuilder(logicPagingQuery.getQueryBuilder());
+        resetPagingQuery.setHighlightBuilder(logicPagingQuery.getHighlightBuilder());
+        resetPagingQuery.setHighlightResultMapper(logicPagingQuery.getHighlightResultMapper());
         return selectByLogicPaging(resetPagingQuery);
     }
 

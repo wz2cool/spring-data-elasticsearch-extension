@@ -36,4 +36,12 @@ public class StudentES {
     public void setAge(Integer age) {
         this.age = age;
     }
+
+    public String getNameHit() {
+        return nameHit;
+    }
+
+    public void setNameHit(String nameHit) {
+        this.nameHit = nameHit;
+    }
 }

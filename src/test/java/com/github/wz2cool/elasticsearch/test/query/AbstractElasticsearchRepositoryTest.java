@@ -1,5 +1,6 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
+import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.JSON;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.model.UpDown;
@@ -7,9 +8,7 @@ import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,6 +60,22 @@ public class AbstractElasticsearchRepositoryTest {
         query.setLastStartPageId(8L);
         query.setLastEndPageId(9L);
         query.setQueryBuilder(idQuery);
+
+        final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
+        System.out.println(JSON.toJSONString(studentESLogicPagingResult));
+    }
+
+    @Test
+    public void testLogicPaging2() {
+
+        final WildcardQueryBuilder wildcardQueryBuilder = QueryBuilders.wildcardQuery("name", "*stu*");
+        LogicPagingQuery<StudentES> query =
+                LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.UP)
+                        .highlightMapping(StudentES::getName, StudentES::setNameHit);
+        query.setLastStartPageId(8L);
+        query.setLastEndPageId(9L);
+        query.setQueryBuilder(wildcardQueryBuilder);
+
         final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
         System.out.println(JSON.toJSONString(studentESLogicPagingResult));
     }
