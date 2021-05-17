@@ -32,6 +32,11 @@ public class HighlightResultMapper implements SearchResultMapper {
 
     private static final Map<Class<?>, BiConsumer<?, Float>> CLASS_SCORE_MAP = new ConcurrentHashMap<>();
 
+
+    public Map<String, BiConsumer<?, String>> getPropertyMapping(Class clazz) {
+        return CLASS_PROPERTY_MAP.get(clazz);
+    }
+
     /**
      * 注册分数映射
      *

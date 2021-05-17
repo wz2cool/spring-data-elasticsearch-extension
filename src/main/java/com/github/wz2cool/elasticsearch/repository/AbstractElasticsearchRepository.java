@@ -1,5 +1,6 @@
 package com.github.wz2cool.elasticsearch.repository;
 
+import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.model.SortDescriptor;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.util.CollectionUtils;
+
 
 import java.util.*;
 
@@ -57,7 +60,9 @@ public abstract class AbstractElasticsearchRepository<T> {
                 .order(logicPagingQuery.getSortOrder()));
         esQuery.withHighlightBuilder(logicPagingQuery.getHighlightBuilder());
         AggregatedPage<T> ts;
-        if (Objects.nonNull(logicPagingQuery.getHighlightResultMapper())) {
+        final HighlightResultMapper highlightResultMapper = logicPagingQuery.getHighlightResultMapper();
+        if (Objects.nonNull(highlightResultMapper)
+                && !CollectionUtils.isEmpty(highlightResultMapper.getPropertyMapping(logicPagingQuery.getClazz()))) {
             ts = getElasticsearchTemplate().queryForPage(
                     esQuery.build(), logicPagingQuery.getClazz(), logicPagingQuery.getHighlightResultMapper());
         } else {
