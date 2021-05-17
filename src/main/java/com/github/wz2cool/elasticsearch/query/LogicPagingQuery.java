@@ -14,6 +14,9 @@ public class LogicPagingQuery<T> {
     private final GetLongPropertyFunction<T> pagingPropertyFunc;
     private QueryBuilder queryBuilder;
     private ResultsMapper resultsMapper;
+    private int pageSize = 10;
+    private Long lastStartPageId;
+    private Long lastEndPageId;
 
     private LogicPagingQuery(Class<T> clazz, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
         this.clazz = clazz;
@@ -50,4 +53,38 @@ public class LogicPagingQuery<T> {
     public GetLongPropertyFunction<T> getPagingPropertyFunc() {
         return pagingPropertyFunc;
     }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Long getLastStartPageId() {
+        return lastStartPageId;
+    }
+
+    public void setLastStartPageId(Long lastStartPageId) {
+        this.lastStartPageId = lastStartPageId;
+    }
+
+    public Long getLastEndPageId() {
+        return lastEndPageId;
+    }
+
+    public void setLastEndPageId(Long lastEndPageId) {
+        this.lastEndPageId = lastEndPageId;
+    }
+
+    public ResultsMapper getResultsMapper() {
+        return resultsMapper;
+    }
+
+    public void setResultsMapper(ResultsMapper resultsMapper) {
+        this.resultsMapper = resultsMapper;
+    }
 }
+
+

@@ -1,53 +1,73 @@
 package com.github.wz2cool.elasticsearch.repository;
 
+import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
+import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.model.SortDescriptor;
+import com.github.wz2cool.elasticsearch.model.UpDown;
+import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 
-public abstract class ElasticsearchExtensionRepository<T, I> {
+import java.util.*;
 
-    private ElasticsearchRepository<T, I> elasticsearchRepository;
+import static com.github.wz2cool.elasticsearch.helper.CommonsHelper.getPropertyName;
 
-    public ElasticsearchExtensionRepository(ElasticsearchRepository<T, I> elasticsearchRepository) {
-        this.elasticsearchRepository = elasticsearchRepository;
+public abstract class ElasticsearchExtensionRepository<T> {
+
+    private ElasticsearchTemplate elasticsearchTemplate;
+
+    public ElasticsearchExtensionRepository(ElasticsearchTemplate elasticsearchTemplate) {
+        this.elasticsearchTemplate = elasticsearchTemplate;
+    }
+
+    public LogicPagingResult<T> selectByLogicPaging(LogicPagingQuery<T> logicPagingQuery) {
+        int pageSize = logicPagingQuery.getPageSize();
+        int queryPageSize = pageSize + 1;
+        final BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        Map.Entry<SortDescriptor, QueryBuilder> mapEntry = LogicPagingHelper.getPagingSortFilterMap(
+                logicPagingQuery.getPagingPropertyFunc(),
+                logicPagingQuery.getSortOrder(),
+                logicPagingQuery.getLastStartPageId(),
+                logicPagingQuery.getLastEndPageId(),
+                logicPagingQuery.getUpDown());
+        if (Objects.nonNull(logicPagingQuery.getQueryBuilder())) {
+            boolQueryBuilder.must(logicPagingQuery.getQueryBuilder());
+        }
+        if (Objects.nonNull(mapEntry.getValue())) {
+            boolQueryBuilder.must(mapEntry.getValue());
+        }
+        NativeSearchQueryBuilder esQuery = new NativeSearchQueryBuilder();
+        esQuery.withQuery(boolQueryBuilder);
+        esQuery.withPageable(PageRequest.of(0, queryPageSize));
+        esQuery.withSort(SortBuilders.fieldSort(getPropertyName(logicPagingQuery.getPagingPropertyFunc()))
+                .order(logicPagingQuery.getSortOrder()));
+        AggregatedPage<T> ts = this.elasticsearchTemplate.queryForPage(
+                esQuery.build(), logicPagingQuery.getClazz(), logicPagingQuery.getResultsMapper());
+        List<T> dataList = ts.getContent();
+        if (!logicPagingQuery.getSortOrder().equals(mapEntry.getKey().getSortOrder())) {
+            Collections.reverse(dataList);
+        }
+        Optional<LogicPagingResult<T>> logicPagingResultOptional = LogicPagingHelper.getPagingResult(
+                logicPagingQuery.getPagingPropertyFunc(),
+                dataList, logicPagingQuery.getPageSize(), logicPagingQuery.getUpDown());
+        if (logicPagingResultOptional.isPresent()) {
+            return logicPagingResultOptional.get();
+        }
+        LogicPagingQuery<T> resetPagingQuery = LogicPagingQuery.createQuery(
+                logicPagingQuery.getClazz(),
+                logicPagingQuery.getPagingPropertyFunc(),
+                logicPagingQuery.getSortOrder(),
+                UpDown.NONE);
+        resetPagingQuery.setPageSize(logicPagingQuery.getPageSize());
+        resetPagingQuery.setQueryBuilder(logicPagingQuery.getQueryBuilder());
+        return selectByLogicPaging(resetPagingQuery);
     }
 
 
-    /// region proxy methods
-
-    public <S extends T> S index(S var1) {
-        return this.elasticsearchRepository.index(var1);
-    }
-
-    public <S extends T> S indexWithoutRefresh(S var1) {
-        return this.elasticsearchRepository.indexWithoutRefresh(var1);
-    }
-
-    public Iterable<T> search(QueryBuilder var1) {
-        return this.elasticsearchRepository.search(var1);
-    }
-
-    public Page<T> search(QueryBuilder var1, Pageable var2) {
-        return this.elasticsearchRepository.search(var1, var2);
-    }
-
-    public Page<T> search(SearchQuery var1) {
-        return this.elasticsearchRepository.search(var1);
-    }
-
-    public Page<T> searchSimilar(T var1, String[] var2, Pageable var3) {
-        return this.elasticsearchRepository.searchSimilar(var1, var2, var3);
-    }
-
-    public void refresh() {
-        this.elasticsearchRepository.refresh();
-    }
-
-    public Class<T> getEntityClass() {
-        return this.elasticsearchRepository.getEntityClass();
-    }
-
-    /// endregion
 }
