@@ -19,8 +19,19 @@ import java.util.*;
 
 import static com.github.wz2cool.elasticsearch.helper.CommonsHelper.getPropertyName;
 
-public abstract class ElasticsearchExtensionRepository<T> {
+/**
+ * Abstract Elasticsearch Repository
+ *
+ * @param <T> entity class
+ * @author Frank
+ */
+public abstract class AbstractElasticsearchRepository<T> {
 
+    /**
+     * Get ElasticsearchTemplate
+     *
+     * @return ElasticsearchTemplate instance.
+     */
     protected abstract ElasticsearchTemplate getElasticsearchTemplate();
 
     public LogicPagingResult<T> selectByLogicPaging(LogicPagingQuery<T> logicPagingQuery) {
