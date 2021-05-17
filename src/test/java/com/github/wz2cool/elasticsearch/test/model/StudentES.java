@@ -1,6 +1,11 @@
 package com.github.wz2cool.elasticsearch.test.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+@Document(indexName = "test_student", type = "testStudent")
 public class StudentES {
+    @Id
     private Long id;
     private String name;
     private Integer age;

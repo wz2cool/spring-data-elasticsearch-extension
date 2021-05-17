@@ -8,6 +8,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 @Repository
 public class StudentEsDAO extends ElasticsearchExtensionRepository<StudentES> {
@@ -20,5 +21,7 @@ public class StudentEsDAO extends ElasticsearchExtensionRepository<StudentES> {
         super(elasticsearchTemplate);
     }
 
-
+    public void save(StudentES... students) {
+        studentEsMapper.saveAll(Arrays.asList(students));
+    }
 }
