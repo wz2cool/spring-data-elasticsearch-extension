@@ -3,7 +3,6 @@ package com.github.wz2cool.elasticsearch.test.dao;
 import com.github.wz2cool.elasticsearch.repository.ElasticsearchExtensionRepository;
 import com.github.wz2cool.elasticsearch.test.mapper.StudentEsMapper;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +14,19 @@ public class StudentEsDAO extends ElasticsearchExtensionRepository<StudentES> {
 
     @Resource
     private StudentEsMapper studentEsMapper;
-
-    @Autowired
-    public StudentEsDAO(ElasticsearchTemplate elasticsearchTemplate) {
-        super(elasticsearchTemplate);
-    }
+    @Resource
+    private ElasticsearchTemplate elasticsearchTemplate;
 
     public void save(StudentES... students) {
         studentEsMapper.saveAll(Arrays.asList(students));
+    }
+
+    public void deleteAll() {
+        studentEsMapper.deleteAll();
+    }
+
+    @Override
+    protected ElasticsearchTemplate getElasticsearchTemplate() {
+        return elasticsearchTemplate;
     }
 }

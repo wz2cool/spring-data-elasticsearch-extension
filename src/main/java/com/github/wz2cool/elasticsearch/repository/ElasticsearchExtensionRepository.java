@@ -21,11 +21,7 @@ import static com.github.wz2cool.elasticsearch.helper.CommonsHelper.getPropertyN
 
 public abstract class ElasticsearchExtensionRepository<T> {
 
-    private ElasticsearchTemplate elasticsearchTemplate;
-
-    public ElasticsearchExtensionRepository(ElasticsearchTemplate elasticsearchTemplate) {
-        this.elasticsearchTemplate = elasticsearchTemplate;
-    }
+    protected abstract ElasticsearchTemplate getElasticsearchTemplate();
 
     public LogicPagingResult<T> selectByLogicPaging(LogicPagingQuery<T> logicPagingQuery) {
         int pageSize = logicPagingQuery.getPageSize();
@@ -48,9 +44,15 @@ public abstract class ElasticsearchExtensionRepository<T> {
         esQuery.withPageable(PageRequest.of(0, queryPageSize));
         esQuery.withSort(SortBuilders.fieldSort(getPropertyName(logicPagingQuery.getPagingPropertyFunc()))
                 .order(logicPagingQuery.getSortOrder()));
-        AggregatedPage<T> ts = this.elasticsearchTemplate.queryForPage(
-                esQuery.build(), logicPagingQuery.getClazz(), logicPagingQuery.getResultsMapper());
-        List<T> dataList = ts.getContent();
+        AggregatedPage<T> ts;
+        if (Objects.nonNull(logicPagingQuery.getResultsMapper())) {
+            ts = getElasticsearchTemplate().queryForPage(
+                    esQuery.build(), logicPagingQuery.getClazz(), logicPagingQuery.getResultsMapper());
+        } else {
+            ts = getElasticsearchTemplate().queryForPage(
+                    esQuery.build(), logicPagingQuery.getClazz());
+        }
+        List<T> dataList = new ArrayList<>(ts.getContent());
         if (!logicPagingQuery.getSortOrder().equals(mapEntry.getKey().getSortOrder())) {
             Collections.reverse(dataList);
         }
