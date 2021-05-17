@@ -4,6 +4,7 @@ import com.github.wz2cool.elasticsearch.lambda.GetLongPropertyFunction;
 import com.github.wz2cool.elasticsearch.model.UpDown;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.data.elasticsearch.core.ResultsMapper;
 
 public class LogicPagingQuery<T> {
 
@@ -12,6 +13,7 @@ public class LogicPagingQuery<T> {
     private final SortOrder sortOrder;
     private final GetLongPropertyFunction<T> pagingPropertyFunc;
     private QueryBuilder queryBuilder;
+    private ResultsMapper resultsMapper;
 
     private LogicPagingQuery(Class<T> clazz, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
         this.clazz = clazz;
