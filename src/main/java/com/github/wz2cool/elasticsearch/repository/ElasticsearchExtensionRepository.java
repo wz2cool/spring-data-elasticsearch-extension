@@ -4,6 +4,7 @@ import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.model.SortDescriptor;
 import com.github.wz2cool.elasticsearch.model.UpDown;
+
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
