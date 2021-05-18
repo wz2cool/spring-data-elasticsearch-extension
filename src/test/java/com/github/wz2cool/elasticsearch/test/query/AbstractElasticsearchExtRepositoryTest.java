@@ -25,7 +25,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = TestApplication.class)
-public class AbstractElasticsearchRepositoryTest {
+public class AbstractElasticsearchExtRepositoryTest {
 
     @Resource
     private ElasticsearchTemplate elasticsearchTemplate;
@@ -71,6 +71,7 @@ public class AbstractElasticsearchRepositoryTest {
         final WildcardQueryBuilder wildcardQueryBuilder = QueryBuilders.wildcardQuery("name", "*stu*");
         LogicPagingQuery<StudentES> query =
                 LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.UP)
+                        .scoreMapping(StudentES::setScore)
                         .highlightMapping(StudentES::getName, StudentES::setNameHit);
         query.setLastStartPageId(8L);
         query.setLastEndPageId(9L);

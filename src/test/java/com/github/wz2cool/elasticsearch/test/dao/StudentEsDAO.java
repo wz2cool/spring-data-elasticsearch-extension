@@ -1,6 +1,6 @@
 package com.github.wz2cool.elasticsearch.test.dao;
 
-import com.github.wz2cool.elasticsearch.repository.AbstractElasticsearchRepository;
+import com.github.wz2cool.elasticsearch.repository.AbstractElasticsearchExtRepository;
 import com.github.wz2cool.elasticsearch.test.mapper.StudentEsMapper;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 
 @Repository
-public class StudentEsDAO extends AbstractElasticsearchRepository<StudentES> {
+public class StudentEsDAO extends AbstractElasticsearchExtRepository<StudentES> {
 
     @Resource
     private StudentEsMapper studentEsMapper;

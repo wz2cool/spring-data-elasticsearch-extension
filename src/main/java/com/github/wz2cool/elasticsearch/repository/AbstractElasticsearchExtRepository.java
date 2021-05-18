@@ -5,7 +5,6 @@ import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.model.SortDescriptor;
 import com.github.wz2cool.elasticsearch.model.UpDown;
-
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -17,7 +16,6 @@ import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.util.CollectionUtils;
 
-
 import java.util.*;
 
 import static com.github.wz2cool.elasticsearch.helper.CommonsHelper.getPropertyName;
@@ -28,7 +26,7 @@ import static com.github.wz2cool.elasticsearch.helper.CommonsHelper.getPropertyN
  * @param <T> entity class
  * @author Frank
  */
-public abstract class AbstractElasticsearchRepository<T> {
+public abstract class AbstractElasticsearchExtRepository<T> {
 
     /**
      * Get ElasticsearchTemplate

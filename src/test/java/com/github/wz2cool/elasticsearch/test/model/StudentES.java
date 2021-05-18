@@ -6,6 +6,8 @@ import org.springframework.data.elasticsearch.annotations.Document;
 
 @Document(indexName = "test_student", type = "testStudent")
 public class StudentES {
+    @Transient
+    private float score;
     @Id
     private Long id;
     private String name;
@@ -43,5 +45,13 @@ public class StudentES {
 
     public void setNameHit(String nameHit) {
         this.nameHit = nameHit;
+    }
+
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
     }
 }
