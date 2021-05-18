@@ -24,7 +24,6 @@ import java.util.function.BiConsumer;
  * elasticsearch 高亮结果映射
  *
  * @author Frank
- * @date 2021/02/04
  **/
 public class HighlightResultMapper implements SearchResultMapper {
 

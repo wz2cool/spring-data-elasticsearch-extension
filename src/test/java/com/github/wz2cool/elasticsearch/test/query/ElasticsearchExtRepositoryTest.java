@@ -56,9 +56,8 @@ public class ElasticsearchExtRepositoryTest {
     public void testLogicPaging() {
         QueryBuilder idQuery = QueryBuilders.rangeQuery("id").lt(77);
         LogicPagingQuery<StudentES> query =
-                LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.UP);
-        query.setLastStartPageId(8L);
-        query.setLastEndPageId(9L);
+                LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.NONE);
+
         query.setQueryBuilder(idQuery);
 
         final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);

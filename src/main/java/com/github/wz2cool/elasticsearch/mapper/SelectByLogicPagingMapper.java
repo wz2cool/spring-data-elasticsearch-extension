@@ -22,7 +22,6 @@ import static com.github.wz2cool.elasticsearch.helper.CommonsHelper.getPropertyN
 
 /**
  * @author Frank
- * @date 2021/05/18
  **/
 public interface SelectByLogicPagingMapper<T> {
 
