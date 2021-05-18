@@ -1,4 +1,4 @@
-package com.github.wz2cool.elasticsearch.repository;
+package com.github.wz2cool.elasticsearch.mapper;
 
 import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
@@ -21,21 +21,19 @@ import java.util.*;
 import static com.github.wz2cool.elasticsearch.helper.CommonsHelper.getPropertyName;
 
 /**
- * Abstract Elasticsearch Repository
- *
- * @param <T> entity class
  * @author Frank
- */
-public abstract class AbstractElasticsearchExtRepository<T> {
+ * @date 2021/05/18
+ **/
+public interface SelectByLogicPagingMapper<T> {
 
     /**
-     * Get ElasticsearchTemplate
+     * select by logic paging
      *
-     * @return ElasticsearchTemplate instance.
+     * @param elasticsearchTemplate elasticsearchTemplate
+     * @param logicPagingQuery      logic paging query
+     * @return logic paging result
      */
-    protected abstract ElasticsearchTemplate getElasticsearchTemplate();
-
-    public LogicPagingResult<T> selectByLogicPaging(LogicPagingQuery<T> logicPagingQuery) {
+    default LogicPagingResult<T> selectByLogicPaging(ElasticsearchTemplate elasticsearchTemplate, LogicPagingQuery<T> logicPagingQuery) {
         int pageSize = logicPagingQuery.getPageSize();
         int queryPageSize = pageSize + 1;
         final BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
@@ -61,10 +59,10 @@ public abstract class AbstractElasticsearchExtRepository<T> {
         final HighlightResultMapper highlightResultMapper = logicPagingQuery.getHighlightResultMapper();
         if (Objects.nonNull(highlightResultMapper)
                 && !CollectionUtils.isEmpty(highlightResultMapper.getPropertyMapping(logicPagingQuery.getClazz()))) {
-            ts = getElasticsearchTemplate().queryForPage(
+            ts = elasticsearchTemplate.queryForPage(
                     esQuery.build(), logicPagingQuery.getClazz(), logicPagingQuery.getHighlightResultMapper());
         } else {
-            ts = getElasticsearchTemplate().queryForPage(
+            ts = elasticsearchTemplate.queryForPage(
                     esQuery.build(), logicPagingQuery.getClazz());
         }
         List<T> dataList = new ArrayList<>(ts.getContent());
@@ -86,8 +84,6 @@ public abstract class AbstractElasticsearchExtRepository<T> {
         resetPagingQuery.setQueryBuilder(logicPagingQuery.getQueryBuilder());
         resetPagingQuery.setHighlightBuilder(logicPagingQuery.getHighlightBuilder());
         resetPagingQuery.setHighlightResultMapper(logicPagingQuery.getHighlightResultMapper());
-        return selectByLogicPaging(resetPagingQuery);
+        return selectByLogicPaging(elasticsearchTemplate, resetPagingQuery);
     }
-
-
 }

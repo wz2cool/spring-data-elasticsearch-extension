@@ -25,7 +25,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = TestApplication.class)
-public class AbstractElasticsearchExtRepositoryTest {
+public class ElasticsearchExtRepositoryTest {
 
     @Resource
     private ElasticsearchTemplate elasticsearchTemplate;

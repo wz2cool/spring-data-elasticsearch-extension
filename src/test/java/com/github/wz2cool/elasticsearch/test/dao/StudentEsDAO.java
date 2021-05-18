@@ -1,6 +1,8 @@
 package com.github.wz2cool.elasticsearch.test.dao;
 
-import com.github.wz2cool.elasticsearch.repository.AbstractElasticsearchExtRepository;
+import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
+import com.github.wz2cool.elasticsearch.repository.ElasticsearchExtRepository;
 import com.github.wz2cool.elasticsearch.test.mapper.StudentEsMapper;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
@@ -10,7 +12,7 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 
 @Repository
-public class StudentEsDAO extends AbstractElasticsearchExtRepository<StudentES> {
+public class StudentEsDAO {
 
     @Resource
     private StudentEsMapper studentEsMapper;
@@ -25,8 +27,7 @@ public class StudentEsDAO extends AbstractElasticsearchExtRepository<StudentES> 
         studentEsMapper.deleteAll();
     }
 
-    @Override
-    protected ElasticsearchTemplate getElasticsearchTemplate() {
-        return elasticsearchTemplate;
+    public LogicPagingResult<StudentES> selectByLogicPaging(LogicPagingQuery<StudentES> logicPagingQuery) {
+        return studentEsMapper.selectByLogicPaging(elasticsearchTemplate, logicPagingQuery);
     }
 }
