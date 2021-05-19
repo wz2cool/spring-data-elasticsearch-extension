@@ -10,9 +10,9 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.util.CollectionUtils;
 
@@ -28,11 +28,11 @@ public interface SelectByLogicPagingMapper<T> {
     /**
      * select by logic paging
      *
-     * @param elasticsearchTemplate elasticsearchTemplate
-     * @param logicPagingQuery      logic paging query
+     * @param elasticsearchOperations elasticsearch operations
+     * @param logicPagingQuery        logic paging query
      * @return logic paging result
      */
-    default LogicPagingResult<T> selectByLogicPaging(ElasticsearchTemplate elasticsearchTemplate, LogicPagingQuery<T> logicPagingQuery) {
+    default LogicPagingResult<T> selectByLogicPaging(ElasticsearchOperations elasticsearchOperations, LogicPagingQuery<T> logicPagingQuery) {
         int pageSize = logicPagingQuery.getPageSize();
         int queryPageSize = pageSize + 1;
         final BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
@@ -54,14 +54,14 @@ public interface SelectByLogicPagingMapper<T> {
         esQuery.withSort(SortBuilders.fieldSort(getPropertyName(logicPagingQuery.getPagingPropertyFunc()))
                 .order(logicPagingQuery.getSortOrder()));
         esQuery.withHighlightBuilder(logicPagingQuery.getHighlightBuilder());
-        AggregatedPage<T> ts;
+        Page<T> ts;
         final HighlightResultMapper highlightResultMapper = logicPagingQuery.getHighlightResultMapper();
         if (Objects.nonNull(highlightResultMapper)
                 && !CollectionUtils.isEmpty(highlightResultMapper.getPropertyMapping(logicPagingQuery.getClazz()))) {
-            ts = elasticsearchTemplate.queryForPage(
+            ts = elasticsearchOperations.queryForPage(
                     esQuery.build(), logicPagingQuery.getClazz(), logicPagingQuery.getHighlightResultMapper());
         } else {
-            ts = elasticsearchTemplate.queryForPage(
+            ts = elasticsearchOperations.queryForPage(
                     esQuery.build(), logicPagingQuery.getClazz());
         }
         List<T> dataList = new ArrayList<>(ts.getContent());
@@ -83,6 +83,6 @@ public interface SelectByLogicPagingMapper<T> {
         resetPagingQuery.setQueryBuilder(logicPagingQuery.getQueryBuilder());
         resetPagingQuery.setHighlightBuilder(logicPagingQuery.getHighlightBuilder());
         resetPagingQuery.setHighlightResultMapper(logicPagingQuery.getHighlightResultMapper());
-        return selectByLogicPaging(elasticsearchTemplate, resetPagingQuery);
+        return selectByLogicPaging(elasticsearchOperations, resetPagingQuery);
     }
 }
