@@ -70,6 +70,7 @@ public class ElasticsearchExtRepositoryTest {
         final WildcardQueryBuilder wildcardQueryBuilder = QueryBuilders.wildcardQuery("name", "*stu*");
         LogicPagingQuery<StudentES> query =
                 LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.UP)
+                        .and(b -> b.termExtQuery(StudentES::getName, "frank"))
                         .scoreMapping(StudentES::setScore)
                         .highlightMapping(StudentES::getName, StudentES::setNameHit);
         query.setLastStartPageId(8L);
