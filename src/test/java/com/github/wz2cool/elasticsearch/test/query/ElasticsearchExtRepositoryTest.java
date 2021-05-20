@@ -74,7 +74,7 @@ public class ElasticsearchExtRepositoryTest {
                         .and(b -> b.multiMatchQuery("test")
                                 .field(StudentES::getName, 1.1f)
                                 .field(StudentES::getNameHit, 11f))
-                        .and(b -> b.rangeExtQuery(StudentES::getAge).gt(1).lt(20))
+                        .and(b -> b.rangeExtQuery(StudentES::getAge).gt(false, 1).lt(20))
                         .scoreMapping(StudentES::setScore)
                         .highlightMapping(StudentES::getName, StudentES::setNameHit);
         query.setLastStartPageId(8L);
