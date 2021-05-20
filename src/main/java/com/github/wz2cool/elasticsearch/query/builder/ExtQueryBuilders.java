@@ -74,4 +74,12 @@ public class ExtQueryBuilders<T> {
     public RangeExtQueryBuilder<T, Date> rangeExtQuery(GetDatePropertyFunction<T> getPropertyFunc) {
         return new RangeExtQueryBuilder<>(getPropertyFunc);
     }
+
+    public WildcardExtQueryBuilder<T> wildcardQuery(GetStringPropertyFunction<T> getPropertyFunc, String query) {
+        return new WildcardExtQueryBuilder<>(getPropertyFunc, query);
+    }
+
+    public RegexpExtQueryBuilder<T> regexpQuery(GetStringPropertyFunction<T> getPropertyFunc, String regexp) {
+        return new RegexpExtQueryBuilder<>(getPropertyFunc, regexp);
+    }
 }
