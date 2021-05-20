@@ -38,11 +38,11 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         return (S) this;
     }
 
-    public S and(UnaryOperator<FilterGroup<T>> groupConsumer) {
-        return and(true, groupConsumer);
+    public S andGroup(UnaryOperator<FilterGroup<T>> groupConsumer) {
+        return andGroup(true, groupConsumer);
     }
 
-    public S and(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
+    public S andGroup(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
         if (enable) {
             FilterGroup<T> filterGroup = new FilterGroup<>();
             booleanQueryBuilder.must(groupConsumer.apply(filterGroup).build());
@@ -50,14 +50,14 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
         return (S) this;
     }
 
-    public S or(UnaryOperator<FilterGroup<T>> groupConsumer) {
-        return or(true, groupConsumer);
+    public S orGroup(UnaryOperator<FilterGroup<T>> groupConsumer) {
+        return orGroup(true, groupConsumer);
     }
 
-    public S or(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
+    public S orGroup(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
         if (enable) {
             FilterGroup<T> filterGroup = new FilterGroup<>();
-            booleanQueryBuilder.should(filterGroup.build());
+            booleanQueryBuilder.should(groupConsumer.apply(filterGroup).build());
         }
         return (S) this;
     }

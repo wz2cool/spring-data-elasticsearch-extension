@@ -1,6 +1,5 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
-import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.JSON;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.model.UpDown;
@@ -8,7 +7,8 @@ import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,8 +35,8 @@ public class ElasticsearchExtRepositoryTest {
 
     @Before
     public void init() {
-        studentEsDAO.deleteAll();
-        saveTestData();
+       /* studentEsDAO.deleteAll();
+        saveTestData();*/
     }
 
     private void saveTestData() {
@@ -66,21 +66,26 @@ public class ElasticsearchExtRepositoryTest {
 
     @Test
     public void testLogicPaging2() {
-
-        final WildcardQueryBuilder wildcardQueryBuilder = QueryBuilders.wildcardQuery("name", "*stu*");
         LogicPagingQuery<StudentES> query =
-                LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.UP)
-                        .and(b -> b.termQuery(StudentES::getName, "frank"))
-                        .and(b -> b.multiMatchQuery("test")
-                                .field(StudentES::getName, 1.1f)
-                                .field(StudentES::getNameHit, 11f))
-                        .and(b -> b.rangeQuery(StudentES::getAge).gt(false, 1).lt(20))
+                LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.NONE)
+                        .or(b -> b.rangeQuery(StudentES::getId).gt(3L).lt(6L))
+                        .or(b -> b.rangeQuery(StudentES::getId).gt(10L).lt(15L))
                         .scoreMapping(StudentES::setScore)
                         .highlightMapping(StudentES::getName, StudentES::setNameHit);
-        query.setLastStartPageId(8L);
-        query.setLastEndPageId(9L);
-        query.setQueryBuilder(wildcardQueryBuilder);
+        final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
+        System.out.println(JSON.toJSONString(studentESLogicPagingResult));
+    }
 
+    @Test
+    public void testLogicPaging3() {
+        LogicPagingQuery<StudentES> query =
+                LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.NONE)
+                        .and(b -> b.multiMatchQuery("aaa", StudentES::getName, StudentES::getNameHit))
+                        .andGroup(g -> g
+                                .and(b -> b.rangeQuery(StudentES::getId).gt(3L))
+                                .and(b -> b.rangeQuery(StudentES::getId).lt(6L)))
+                        .scoreMapping(StudentES::setScore)
+                        .highlightMapping(StudentES::getName, StudentES::setNameHit);
         final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
         System.out.println(JSON.toJSONString(studentESLogicPagingResult));
     }
