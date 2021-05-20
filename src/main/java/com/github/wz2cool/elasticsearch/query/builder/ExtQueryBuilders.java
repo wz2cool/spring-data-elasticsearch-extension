@@ -19,31 +19,31 @@ public class ExtQueryBuilders<T> {
         return new MatchPhrasePrefixExtQueryBuilder<>(getPropertyFunc, text);
     }
 
-    public TermExtQueryBuilder<T, String> termExtQuery(GetStringPropertyFunction<T> getPropertyFunc, String value) {
+    public TermExtQueryBuilder<T, String> termQuery(GetStringPropertyFunction<T> getPropertyFunc, String value) {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
 
-    public TermExtQueryBuilder<T, Integer> termExtQuery(GetIntegerPropertyFunction<T> getPropertyFunc, int value) {
+    public TermExtQueryBuilder<T, Integer> termQuery(GetIntegerPropertyFunction<T> getPropertyFunc, int value) {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
 
-    public TermExtQueryBuilder<T, Long> termExtQuery(GetLongPropertyFunction<T> getPropertyFunc, long value) {
+    public TermExtQueryBuilder<T, Long> termQuery(GetLongPropertyFunction<T> getPropertyFunc, long value) {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
 
-    public TermExtQueryBuilder<T, Float> termExtQuery(GetFloatPropertyFunction<T> getPropertyFunc, float value) {
+    public TermExtQueryBuilder<T, Float> termQuery(GetFloatPropertyFunction<T> getPropertyFunc, float value) {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
 
-    public TermExtQueryBuilder<T, Double> termExtQuery(GetDoublePropertyFunction<T> getPropertyFunc, double value) {
+    public TermExtQueryBuilder<T, Double> termQuery(GetDoublePropertyFunction<T> getPropertyFunc, double value) {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
 
-    public TermExtQueryBuilder<T, Boolean> termExtQuery(GetBooleanPropertyFunction<T> getPropertyFunc, boolean value) {
+    public TermExtQueryBuilder<T, Boolean> termQuery(GetBooleanPropertyFunction<T> getPropertyFunc, boolean value) {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
 
-    public TermExtQueryBuilder<T, Date> termExtQuery(GetDatePropertyFunction<T> getPropertyFunc, Date value) {
+    public TermExtQueryBuilder<T, Date> termQuery(GetDatePropertyFunction<T> getPropertyFunc, Date value) {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
 
@@ -55,23 +55,23 @@ public class ExtQueryBuilders<T> {
         return new PrefixExtQueryBuilder<>(getPropertyFunc, prefix);
     }
 
-    public RangeExtQueryBuilder<T, Integer> rangeExtQuery(GetIntegerPropertyFunction<T> getPropertyFunc) {
+    public RangeExtQueryBuilder<T, Integer> rangeQuery(GetIntegerPropertyFunction<T> getPropertyFunc) {
         return new RangeExtQueryBuilder<>(getPropertyFunc);
     }
 
-    public RangeExtQueryBuilder<T, Long> rangeExtQuery(GetLongPropertyFunction<T> getPropertyFunc) {
+    public RangeExtQueryBuilder<T, Long> rangeQuery(GetLongPropertyFunction<T> getPropertyFunc) {
         return new RangeExtQueryBuilder<>(getPropertyFunc);
     }
 
-    public RangeExtQueryBuilder<T, Float> rangeExtQuery(GetFloatPropertyFunction<T> getPropertyFunc) {
+    public RangeExtQueryBuilder<T, Float> rangeQuery(GetFloatPropertyFunction<T> getPropertyFunc) {
         return new RangeExtQueryBuilder<>(getPropertyFunc);
     }
 
-    public RangeExtQueryBuilder<T, Double> rangeExtQuery(GetDoublePropertyFunction<T> getPropertyFunc) {
+    public RangeExtQueryBuilder<T, Double> rangeQuery(GetDoublePropertyFunction<T> getPropertyFunc) {
         return new RangeExtQueryBuilder<>(getPropertyFunc);
     }
 
-    public RangeExtQueryBuilder<T, Date> rangeExtQuery(GetDatePropertyFunction<T> getPropertyFunc) {
+    public RangeExtQueryBuilder<T, Date> rangeQuery(GetDatePropertyFunction<T> getPropertyFunc) {
         return new RangeExtQueryBuilder<>(getPropertyFunc);
     }
 

@@ -5,16 +5,13 @@ import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetLongPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import com.github.wz2cool.elasticsearch.model.UpDown;
-import com.github.wz2cool.elasticsearch.query.builder.ExtQueryBuilder;
-import com.github.wz2cool.elasticsearch.query.builder.ExtQueryBuilders;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
-public class LogicPagingQuery<T> {
+public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>> {
 
     private final Class<T> clazz;
     private final UpDown upDown;
@@ -49,10 +46,6 @@ public class LogicPagingQuery<T> {
         String propertyName = CommonsHelper.getPropertyName(getSearchPropertyFunc);
         highlightBuilder.field(propertyName);
         highlightResultMapper.registerHitMapping(this.clazz, getSearchPropertyFunc, setHighLightPropertyFunc);
-        return this;
-    }
-
-    public LogicPagingQuery<T> and(Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
         return this;
     }
 
