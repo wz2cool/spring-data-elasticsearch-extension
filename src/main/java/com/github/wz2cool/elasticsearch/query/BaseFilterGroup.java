@@ -1,0 +1,68 @@
+package com.github.wz2cool.elasticsearch.query;
+
+import com.github.wz2cool.elasticsearch.query.builder.ExtQueryBuilder;
+import com.github.wz2cool.elasticsearch.query.builder.ExtQueryBuilders;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+
+@SuppressWarnings("unchecked")
+public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
+
+    private final BoolQueryBuilder booleanQueryBuilder = new BoolQueryBuilder();
+    private final ExtQueryBuilders<T> extQueryBuilders = new ExtQueryBuilders<>();
+
+    public S and(Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
+        return and(true, filter);
+    }
+
+    public S and(boolean enable, Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
+        if (enable) {
+            final ExtQueryBuilder extQueryBuilder = filter.apply(extQueryBuilders);
+            booleanQueryBuilder.must(extQueryBuilder.build());
+        }
+        return (S) this;
+    }
+
+    public S or(Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
+        return or(true, filter);
+    }
+
+    public S or(boolean enable, Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
+        if (enable) {
+            final ExtQueryBuilder extQueryBuilder = filter.apply(extQueryBuilders);
+            booleanQueryBuilder.should(extQueryBuilder.build());
+        }
+        return (S) this;
+    }
+
+    public S and(UnaryOperator<FilterGroup<T>> groupConsumer) {
+        return and(true, groupConsumer);
+    }
+
+    public S and(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
+        if (enable) {
+            FilterGroup<T> filterGroup = new FilterGroup<>();
+            booleanQueryBuilder.must(groupConsumer.apply(filterGroup).build());
+        }
+        return (S) this;
+    }
+
+    public S or(UnaryOperator<FilterGroup<T>> groupConsumer) {
+        return or(true, groupConsumer);
+    }
+
+    public S or(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
+        if (enable) {
+            FilterGroup<T> filterGroup = new FilterGroup<>();
+            booleanQueryBuilder.should(filterGroup.build());
+        }
+        return (S) this;
+    }
+
+    public QueryBuilder build() {
+        return this.booleanQueryBuilder;
+    }
+}

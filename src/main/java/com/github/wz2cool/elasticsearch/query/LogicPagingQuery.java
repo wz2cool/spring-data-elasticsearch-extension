@@ -10,7 +10,6 @@ import com.github.wz2cool.elasticsearch.query.builder.ExtQueryBuilders;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
-import org.springframework.data.elasticsearch.core.SearchResultMapper;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
