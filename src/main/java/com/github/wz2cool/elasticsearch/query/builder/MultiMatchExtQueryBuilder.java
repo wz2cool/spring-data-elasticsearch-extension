@@ -9,6 +9,7 @@ public class MultiMatchExtQueryBuilder<T> implements ExtQueryBuilder {
 
     private final MultiMatchQueryBuilder multiMatchQueryBuilder;
 
+    @SafeVarargs
     public MultiMatchExtQueryBuilder(String value, GetStringPropertyFunction<T>... getPropertyFuncs) {
         this.multiMatchQueryBuilder = new MultiMatchQueryBuilder(value);
         for (GetStringPropertyFunction<T> getPropertyFunc : getPropertyFuncs) {
