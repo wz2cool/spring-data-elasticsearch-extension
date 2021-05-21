@@ -5,7 +5,10 @@ import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetCommonPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.search.sort.*;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.ScoreSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,7 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> {
     private final HighlightResultMapper highlightResultMapper = new HighlightResultMapper();
     private final HighlightBuilder highlightBuilder = new HighlightBuilder();
     private final List<SortBuilder> sortBuilders = new ArrayList<>();
-    private int pageSize = 10;
+
 
     private DynamicQuery(Class<T> clazz) {
         this.clazz = clazz;
@@ -37,11 +40,6 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> {
         String propertyName = CommonsHelper.getPropertyName(getSearchPropertyFunc);
         highlightBuilder.field(propertyName);
         highlightResultMapper.registerHitMapping(this.clazz, getSearchPropertyFunc, setHighLightPropertyFunc);
-        return this;
-    }
-
-    public DynamicQuery<T> pageSize(int pageSize) {
-        this.pageSize = pageSize;
         return this;
     }
 
@@ -84,13 +82,5 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> {
 
     public Class<T> getClazz() {
         return clazz;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
     }
 }

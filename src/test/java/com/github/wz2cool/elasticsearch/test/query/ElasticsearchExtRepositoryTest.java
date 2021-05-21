@@ -93,7 +93,6 @@ public class ElasticsearchExtRepositoryTest {
     public void testDynamicQuery() {
         DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
                 .and(x -> x.rangeQuery(StudentES::getId).gt(5L).lt(10L))
-                .pageSize(20)
                 .orderByScore(SortOrder.DESC)
                 .orderBy(StudentES::getId, SortOrder.DESC);
         final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);

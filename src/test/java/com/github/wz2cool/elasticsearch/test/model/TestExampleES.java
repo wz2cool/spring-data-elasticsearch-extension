@@ -2,6 +2,8 @@ package com.github.wz2cool.elasticsearch.test.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.Date;
 
@@ -10,12 +12,27 @@ public class TestExampleES {
 
     @Id
     private Long id;
+    @Field(type = FieldType.Text, analyzer = "")
     private String p1;
     private Integer p2;
     private Long p3;
     private Float p4;
     private Double p5;
     private Date p6;
+
+    public TestExampleES() {
+
+    }
+
+    public TestExampleES(Long id, String p1, Integer p2, Long p3, Float p4, Double p5, Date p6) {
+        this.id = id;
+        this.p1 = p1;
+        this.p2 = p2;
+        this.p3 = p3;
+        this.p4 = p4;
+        this.p5 = p5;
+        this.p6 = p6;
+    }
 
     public String getP1() {
         return p1;
