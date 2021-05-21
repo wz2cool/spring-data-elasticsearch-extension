@@ -84,6 +84,67 @@ public class ExtQueryBuilders<T> {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
 
+
+    public TermsExtQueryBuilder<T, String> terms(GetStringArrayPropertyFunction<T> getPropertyFunc, String... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Integer> terms(GetIntegerArrayPropertyFunction<T> getPropertyFunc, Integer... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Long> terms(GetLongArrayPropertyFunction<T> getPropertyFunc, Long... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Float> terms(GetFloatArrayPropertyFunction<T> getPropertyFunc, Float... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Double> terms(GetDoubleArrayPropertyFunction<T> getPropertyFunc, Double... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Date> terms(GetDateArrayPropertyFunction<T> getPropertyFunc, Date... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, BigDecimal> terms(GetBigDecimalArrayPropertyFunction<T> getPropertyFunc, BigDecimal... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, String> terms(GetStringPropertyFunction<T> getPropertyFunc, String... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Integer> terms(GetIntegerPropertyFunction<T> getPropertyFunc, Integer... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Long> terms(GetLongPropertyFunction<T> getPropertyFunc, Long... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Float> terms(GetFloatPropertyFunction<T> getPropertyFunc, Float... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Double> terms(GetDoublePropertyFunction<T> getPropertyFunc, Double... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Boolean> terms(GetBooleanPropertyFunction<T> getPropertyFunc, Boolean... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, Date> terms(GetDatePropertyFunction<T> getPropertyFunc, Date... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermsExtQueryBuilder<T, BigDecimal> terms(GetBigDecimalPropertyFunction<T> getPropertyFunc, BigDecimal... value) {
+        return new TermsExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
     public FuzzyExtQueryBuilder<T> fuzzy(GetStringPropertyFunction<T> getPropertyFunc, String value) {
         return new FuzzyExtQueryBuilder<>(getPropertyFunc, value);
     }

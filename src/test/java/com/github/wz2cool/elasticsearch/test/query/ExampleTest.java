@@ -217,7 +217,7 @@ public class ExampleTest {
                 .highlightMapping(TestExampleES::getP1, TestExampleES::setP1Hit)
                 .or(x -> x.match(TestExampleES::getP1, "aachurch1"))
                 .or(x -> x.match(TestExampleES::getP1, "fhurler0"))
-                .or(x-> x.wildcard(TestExampleES::getP1, "*a*"))
+                .or(x -> x.wildcard(TestExampleES::getP1, "*a*"))
                 .orderBy(TestExampleES::getId, SortOrder.DESC);
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         System.out.println(JSON.toJSONString(testExampleES));
@@ -238,6 +238,20 @@ public class ExampleTest {
         assertFalse(testExampleES.isEmpty());
         for (TestExampleES testExample : testExampleES) {
             boolean valid = testExample.getP8().compareTo(from) > 0 && testExample.getP8().compareTo(to) < 0;
+            assertTrue(valid);
+        }
+    }
+
+    @Test
+    public void testTermsInteger() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(x -> x.terms(TestExampleES::getP9, 1, 10));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        System.out.println(JSON.toJSONString(testExampleES));
+        assertFalse(testExampleES.isEmpty());
+
+        for (TestExampleES testExample : testExampleES) {
+            boolean valid = ArrayUtils.contains(testExample.getP9(), 1) || ArrayUtils.contains(testExample.getP9(), 10);
             assertTrue(valid);
         }
     }
