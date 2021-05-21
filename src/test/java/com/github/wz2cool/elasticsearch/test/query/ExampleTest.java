@@ -166,10 +166,20 @@ public class ExampleTest {
     }
 
     @Test
-    public void testMatchString() {
+    public void testMatch() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .highlightMapping(TestExampleES::getP1, TestExampleES::setP1Hit)
                 .and(x -> x.matchQuery(TestExampleES::getP1, "aachurch1"));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        System.out.println(JSON.toJSONString(testExampleES));
+        assertEquals("aachurch1@wix.com", testExampleES.get(0).getP1());
+    }
+
+    @Test
+    public void testMutliMatch() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .highlightMapping(TestExampleES::getP1, TestExampleES::setP1Hit)
+                .and(x -> x.multiMatchQuery("aachurch1").field(TestExampleES::getP1));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         System.out.println(JSON.toJSONString(testExampleES));
         assertEquals("aachurch1@wix.com", testExampleES.get(0).getP1());
