@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface SelectByDynamicQueryMapper<T> {
 
     default List<T> selectByDynamicQuery(ElasticsearchOperations elasticsearchOperations, DynamicQuery<T> dynamicQuery) {
-        return selectByDynamicQuery(elasticsearchOperations, dynamicQuery, 0, 10);
+        return selectByDynamicQuery(elasticsearchOperations, dynamicQuery, 0, 100);
     }
 
     default List<T> selectByDynamicQuery(

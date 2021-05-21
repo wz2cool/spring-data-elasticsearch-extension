@@ -17,8 +17,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -119,5 +118,47 @@ public class ExampleTest {
                 .and(x -> x.termQuery(TestExampleES::getP8, target));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(target, testExampleES.get(0).getP8());
+    }
+
+    @Test
+    public void testRangeInteger() {
+        Integer from = 5;
+        Integer to = 10;
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(x -> x.rangeQuery(TestExampleES::getP2).gt(from).lt(to));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertFalse(testExampleES.isEmpty());
+        for (TestExampleES testExample : testExampleES) {
+            boolean valid = testExample.getP2() > from && testExample.getP2() < to;
+            assertTrue(valid);
+        }
+    }
+
+    @Test
+    public void testRangeBigDecimal() {
+        BigDecimal from = BigDecimal.valueOf(1.5);
+        BigDecimal to = BigDecimal.valueOf(2.1);
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(x -> x.rangeQuery(TestExampleES::getP8).gt(from).lt(to));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertFalse(testExampleES.isEmpty());
+        for (TestExampleES testExample : testExampleES) {
+            boolean valid = testExample.getP8().compareTo(from) > 0 && testExample.getP8().compareTo(to) < 0;
+            assertTrue(valid);
+        }
+    }
+
+    @Test
+    public void testRangeDate() {
+        Date from = Date.valueOf("2020-12-22");
+        Date to = Date.valueOf("2021-02-21");
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(x -> x.rangeQuery(TestExampleES::getP6).gt(from).lt(to));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertFalse(testExampleES.isEmpty());
+        for (TestExampleES testExample : testExampleES) {
+            boolean valid = testExample.getP6().compareTo(from) > 0 && testExample.getP6().compareTo(to) < 0;
+            assertTrue(valid);
+        }
     }
 }

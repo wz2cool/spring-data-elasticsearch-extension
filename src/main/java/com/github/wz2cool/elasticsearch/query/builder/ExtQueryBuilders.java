@@ -81,6 +81,10 @@ public class ExtQueryBuilders<T> {
         return new RangeExtQueryBuilder<>(getPropertyFunc);
     }
 
+    public RangeExtQueryBuilder<T, BigDecimal> rangeQuery(GetBigDecimalPropertyFunction<T> getPropertyFunc) {
+        return new RangeExtQueryBuilder<>(getPropertyFunc);
+    }
+
     public WildcardExtQueryBuilder<T> wildcardQuery(GetStringPropertyFunction<T> getPropertyFunc, String query) {
         return new WildcardExtQueryBuilder<>(getPropertyFunc, query);
     }
