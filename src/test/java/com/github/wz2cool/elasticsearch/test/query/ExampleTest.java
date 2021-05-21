@@ -1,9 +1,12 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
+import com.github.wz2cool.elasticsearch.helper.JSON;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -160,5 +163,15 @@ public class ExampleTest {
             boolean valid = testExample.getP6().compareTo(from) > 0 && testExample.getP6().compareTo(to) < 0;
             assertTrue(valid);
         }
+    }
+
+    @Test
+    public void testMatchString() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .highlightMapping(TestExampleES::getP1, TestExampleES::setP1Hit)
+                .and(x -> x.matchQuery(TestExampleES::getP1, "aachurch1"));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        System.out.println(JSON.toJSONString(testExampleES));
+        assertEquals("aachurch1@wix.com", testExampleES.get(0).getP1());
     }
 }

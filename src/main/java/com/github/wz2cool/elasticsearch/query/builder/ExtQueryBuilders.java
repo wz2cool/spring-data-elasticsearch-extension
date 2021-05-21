@@ -7,6 +7,9 @@ import java.util.Date;
 
 public class ExtQueryBuilders<T> {
 
+    public MatchExtQueryBuilder<T> matchQuery(GetStringPropertyFunction<T> getPropertyFunc, String text) {
+        return new MatchExtQueryBuilder<>(getPropertyFunc, text);
+    }
 
     @SafeVarargs
     public final MultiMatchExtQueryBuilder<T> multiMatchQuery(String value, GetStringPropertyFunction<T>... getPropertyFuncs) {

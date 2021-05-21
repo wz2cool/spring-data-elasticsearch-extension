@@ -1,6 +1,7 @@
 package com.github.wz2cool.elasticsearch.test.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -23,8 +24,9 @@ public class TestExampleES {
     private Date p6;
     @Field(type = FieldType.Keyword)
     private String p7;
-
     private BigDecimal p8;
+    @Transient
+    private String p1Hit;
 
     public TestExampleES() {
 
@@ -112,5 +114,13 @@ public class TestExampleES {
 
     public void setP8(BigDecimal p8) {
         this.p8 = p8;
+    }
+
+    public String getP1Hit() {
+        return p1Hit;
+    }
+
+    public void setP1Hit(String p1Hit) {
+        this.p1Hit = p1Hit;
     }
 }
