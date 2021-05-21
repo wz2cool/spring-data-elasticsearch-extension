@@ -3,7 +3,6 @@ package com.github.wz2cool.elasticsearch.test.query;
 import com.github.wz2cool.elasticsearch.helper.JSON;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.model.UpDown;
-import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
@@ -15,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -67,8 +65,8 @@ public class ElasticsearchExtRepositoryTest {
     public void testLogicPaging2() {
         LogicPagingQuery<StudentES> query =
                 LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.NONE)
-                        .or(b -> b.rangeQuery(StudentES::getId).gt(3L).lt(6L))
-                        .or(b -> b.rangeQuery(StudentES::getId).gt(10L).lt(15L))
+                        .or(b -> b.range(StudentES::getId).gt(3L).lt(6L))
+                        .or(b -> b.range(StudentES::getId).gt(10L).lt(15L))
                         .scoreMapping(StudentES::setScore)
                         .highlightMapping(StudentES::getName, StudentES::setNameHit);
         final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
@@ -79,11 +77,11 @@ public class ElasticsearchExtRepositoryTest {
     public void testLogicPaging3() {
         LogicPagingQuery<StudentES> query =
                 LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.NONE)
-                        .and(false, b -> b.multiMatchQuery("aaa", StudentES::getName, StudentES::getNameHit)
+                        .and(false, b -> b.multiMatch("aaa", StudentES::getName, StudentES::getNameHit)
                                 .minimumShouldMatch("100%"))
                         .andGroup(g -> g
-                                .and(b -> b.rangeQuery(StudentES::getId).gt(3L))
-                                .and(b -> b.rangeQuery(StudentES::getId).lt(6L)))
+                                .and(b -> b.range(StudentES::getId).gt(3L))
+                                .and(b -> b.range(StudentES::getId).lt(6L)))
                         .scoreMapping(StudentES::setScore)
                         .highlightMapping(StudentES::getName, StudentES::setNameHit);
         final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
