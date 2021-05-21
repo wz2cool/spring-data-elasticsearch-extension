@@ -73,7 +73,7 @@ public class HighlightResultMapper implements SearchResultMapper {
         long totalHits = searchResponse.getHits().getTotalHits();
         List<T> list = new ArrayList<>();
         SearchHits hits = searchResponse.getHits();
-        if (ArrayUtils.isEmpty(hits.getHits()) || !CLASS_PROPERTY_MAP.containsKey(clazz)) {
+        if (ArrayUtils.isEmpty(hits.getHits())) {
             return new AggregatedPageImpl<>(list, pageable, totalHits);
         }
         Map<String, BiConsumer<?, String>> propertyHitMap = CLASS_PROPERTY_MAP.get(clazz);

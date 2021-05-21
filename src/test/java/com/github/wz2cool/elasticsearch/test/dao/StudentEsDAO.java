@@ -1,6 +1,7 @@
 package com.github.wz2cool.elasticsearch.test.dao;
 
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import com.github.wz2cool.elasticsearch.test.mapper.StudentEsQueryMapper;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 
 @Repository
 public class StudentEsDAO {
@@ -28,5 +30,9 @@ public class StudentEsDAO {
 
     public LogicPagingResult<StudentES> selectByLogicPaging(LogicPagingQuery<StudentES> logicPagingQuery) {
         return studentEsMapper.selectByLogicPaging(elasticsearchTemplate, logicPagingQuery);
+    }
+
+    public List<StudentES> selectByDynamicQuery(DynamicQuery<StudentES> dynamicQuery) {
+        return studentEsMapper.selectByDynamicQuery(elasticsearchTemplate, dynamicQuery);
     }
 }

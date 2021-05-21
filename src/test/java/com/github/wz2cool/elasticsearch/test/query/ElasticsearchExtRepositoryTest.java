@@ -3,6 +3,7 @@ package com.github.wz2cool.elasticsearch.test.query;
 import com.github.wz2cool.elasticsearch.helper.JSON;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.model.UpDown;
+import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
@@ -26,14 +27,14 @@ import java.util.List;
 @SpringBootTest
 @ContextConfiguration(classes = TestApplication.class)
 public class ElasticsearchExtRepositoryTest {
-    
+
     @Resource
     private StudentEsDAO studentEsDAO;
 
     @Before
     public void init() {
-       /* studentEsDAO.deleteAll();
-        saveTestData();*/
+
+        // saveTestData();
     }
 
     private void saveTestData() {
@@ -86,5 +87,16 @@ public class ElasticsearchExtRepositoryTest {
                         .highlightMapping(StudentES::getName, StudentES::setNameHit);
         final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
         System.out.println(JSON.toJSONString(studentESLogicPagingResult));
+    }
+
+    @Test
+    public void testDynamicQuery() {
+        DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
+                .and(x -> x.rangeQuery(StudentES::getId).gt(5L).lt(10L))
+                .pageSize(20)
+                .orderByScore(SortOrder.DESC)
+                .orderBy(StudentES::getId, SortOrder.DESC);
+        final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
+        System.out.println(JSON.toJSONString(studentESList));
     }
 }
