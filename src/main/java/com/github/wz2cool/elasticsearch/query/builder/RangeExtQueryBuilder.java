@@ -5,6 +5,8 @@ import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 
+import java.util.Date;
+
 /**
  * A Query that matches documents within an range of terms.
  *
@@ -27,7 +29,7 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
      */
     public RangeExtQueryBuilder<T, P> gt(boolean enable, P from) {
         if (enable) {
-            rangeQueryBuilder.gt(from);
+            rangeQueryBuilder.gt(getFilterValue(from));
         }
         return this;
     }
@@ -36,7 +38,7 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
      * @see RangeQueryBuilder#gt(Object)
      */
     public RangeExtQueryBuilder<T, P> gt(P from) {
-        rangeQueryBuilder.gt(from);
+        rangeQueryBuilder.gt(getFilterValue(from));
         return this;
     }
 
@@ -45,7 +47,7 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
      */
     public RangeExtQueryBuilder<T, P> gte(boolean enable, P from) {
         if (enable) {
-            rangeQueryBuilder.gte(from);
+            rangeQueryBuilder.gte(getFilterValue(from));
         }
         return this;
     }
@@ -54,7 +56,7 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
      * @see RangeQueryBuilder#gte(Object)
      */
     public RangeExtQueryBuilder<T, P> gte(P from) {
-        rangeQueryBuilder.gte(from);
+        rangeQueryBuilder.gte(getFilterValue(from));
         return this;
     }
 
@@ -63,7 +65,7 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
      */
     public RangeExtQueryBuilder<T, P> lt(boolean enable, P to) {
         if (enable) {
-            rangeQueryBuilder.lt(to);
+            rangeQueryBuilder.lt(getFilterValue(to));
         }
         return this;
     }
@@ -72,7 +74,7 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
      * @see RangeQueryBuilder#lt(Object)
      */
     public RangeExtQueryBuilder<T, P> lt(P to) {
-        rangeQueryBuilder.lt(to);
+        rangeQueryBuilder.lt(getFilterValue(to));
         return this;
     }
 
@@ -81,7 +83,7 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
      */
     public RangeExtQueryBuilder<T, P> lte(boolean enable, P to) {
         if (enable) {
-            rangeQueryBuilder.lte(to);
+            rangeQueryBuilder.lte(getFilterValue(to));
         }
         return this;
     }
@@ -90,7 +92,7 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
      * @see RangeQueryBuilder#lte(Object)
      */
     public RangeExtQueryBuilder<T, P> lte(P to) {
-        rangeQueryBuilder.lte(to);
+        rangeQueryBuilder.lte(getFilterValue(to));
         return this;
     }
 
@@ -108,6 +110,13 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
     public RangeExtQueryBuilder<T, P> relation(String relation) {
         rangeQueryBuilder.relation(relation);
         return this;
+    }
+
+    private Object getFilterValue(P value) {
+        if (value instanceof Date) {
+            return ((Date) value).getTime();
+        }
+        return value;
     }
 
     @Override

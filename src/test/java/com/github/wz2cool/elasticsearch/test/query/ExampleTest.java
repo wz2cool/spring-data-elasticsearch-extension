@@ -58,19 +58,54 @@ public class ExampleTest {
     }
 
     @Test
-    public void testTermLong() {
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
-                .and(x -> x.termQuery(TestExampleES::getId, 2L));
-        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
-        assertEquals(1, testExampleES.size());
-        assertEquals("aachurch1@wix.com", testExampleES.get(0).getP1());
-    }
-
-    @Test
     public void testTermString() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .and(x -> x.termQuery(TestExampleES::getP7, "Zorina"));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals("Zorina", testExampleES.get(0).getP7());
+    }
+
+    @Test
+    public void testTermInteger() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(x -> x.termQuery(TestExampleES::getP2, 3));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
+    }
+
+    @Test
+    public void testTermLong() {
+        Long target = 80L;
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(x -> x.termQuery(TestExampleES::getP3, target));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertEquals(target, testExampleES.get(0).getP3());
+    }
+
+    @Test
+    public void testTermFloat() {
+        Float target = 10.1f;
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(x -> x.termQuery(TestExampleES::getP4, target));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertEquals(target, testExampleES.get(0).getP4());
+    }
+
+    @Test
+    public void testTermDouble() {
+        Double target = 17.1d;
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(x -> x.termQuery(TestExampleES::getP5, target));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertEquals(target, testExampleES.get(0).getP5());
+    }
+
+    @Test
+    public void testTermDate() {
+        Date target = Date.valueOf("2020-09-10");
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(x -> x.termQuery(TestExampleES::getP6, target));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertEquals(target.getTime(), testExampleES.get(0).getP6().getTime());
     }
 }

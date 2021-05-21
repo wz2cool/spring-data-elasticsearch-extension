@@ -1,10 +1,13 @@
 package com.github.wz2cool.elasticsearch.test.model;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Document(indexName = "test_example", type = "testExample")
