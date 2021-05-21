@@ -24,6 +24,34 @@ public class ExtQueryBuilders<T> {
         return new MatchPhrasePrefixExtQueryBuilder<>(getPropertyFunc, text);
     }
 
+    public TermExtQueryBuilder<T, String> termQuery(GetStringArrayPropertyFunction<T> getPropertyFunc, String value) {
+        return new TermExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermExtQueryBuilder<T, Integer> termQuery(GetIntegerArrayPropertyFunction<T> getPropertyFunc, int value) {
+        return new TermExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermExtQueryBuilder<T, Long> termQuery(GetLongArrayPropertyFunction<T> getPropertyFunc, long value) {
+        return new TermExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermExtQueryBuilder<T, Float> termQuery(GetFloatArrayPropertyFunction<T> getPropertyFunc, float value) {
+        return new TermExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermExtQueryBuilder<T, Double> termQuery(GetDoubleArrayPropertyFunction<T> getPropertyFunc, double value) {
+        return new TermExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermExtQueryBuilder<T, Date> termQuery(GetDateArrayPropertyFunction<T> getPropertyFunc, Date value) {
+        return new TermExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermExtQueryBuilder<T, BigDecimal> termQuery(GetBigDecimalArrayPropertyFunction<T> getPropertyFunc, BigDecimal value) {
+        return new TermExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
     public TermExtQueryBuilder<T, String> termQuery(GetStringPropertyFunction<T> getPropertyFunc, String value) {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
@@ -55,6 +83,7 @@ public class ExtQueryBuilders<T> {
     public TermExtQueryBuilder<T, BigDecimal> termQuery(GetBigDecimalPropertyFunction<T> getPropertyFunc, BigDecimal value) {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
+
 
     public FuzzyExtQueryBuilder<T> fuzzyQuery(GetStringPropertyFunction<T> getPropertyFunc, String value) {
         return new FuzzyExtQueryBuilder<>(getPropertyFunc, value);

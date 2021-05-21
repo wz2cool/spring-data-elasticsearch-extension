@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Frank
  */
+@SuppressWarnings("all")
 public class CommonsHelper {
     private static ConcurrentHashMap<String, Class> classMap = new ConcurrentHashMap<>();
 
@@ -74,12 +75,12 @@ public class CommonsHelper {
         return obj.toString();
     }
 
-    public static <T, R extends Comparable> String getPropertyName(GetPropertyFunction<T, R> fn) {
+    public static <T, R> String getPropertyName(GetPropertyFunction<T, R> fn) {
         return getPropertyInfo(fn).getPropertyName();
     }
 
     @SuppressWarnings("squid:S00112")
-    public static <T, R extends Comparable> PropertyInfo getPropertyInfo(GetPropertyFunction<T, R> fn) {
+    public static <T, R> PropertyInfo getPropertyInfo(GetPropertyFunction<T, R> fn) {
         try {
             Method method = fn.getClass().getDeclaredMethod("writeReplace");
             method.setAccessible(true);

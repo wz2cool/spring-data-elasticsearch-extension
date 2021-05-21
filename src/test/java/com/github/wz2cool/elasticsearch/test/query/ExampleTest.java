@@ -6,6 +6,7 @@ import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
+import org.apache.commons.lang3.ArrayUtils;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Before;
 import org.junit.Test;
@@ -121,6 +122,15 @@ public class ExampleTest {
                 .and(x -> x.termQuery(TestExampleES::getP8, target));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(target, testExampleES.get(0).getP8());
+    }
+
+    @Test
+    public void testTermArray() {
+        Integer target = 9;
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
+                .and(x -> x.termQuery(TestExampleES::getP9, target));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertTrue(ArrayUtils.contains(testExampleES.get(0).getP9(), target));
     }
 
     @Test

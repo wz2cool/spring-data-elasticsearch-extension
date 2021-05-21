@@ -1,6 +1,7 @@
 package com.github.wz2cool.elasticsearch.query.builder;
 
 import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
+import com.github.wz2cool.elasticsearch.lambda.GetArrayPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
@@ -22,6 +23,13 @@ public class TermExtQueryBuilder<T, P extends Comparable> implements ExtQueryBui
         this.termQueryBuilder = new TermQueryBuilder(propertyName, getFilterValue(value));
     }
 
+    /**
+     * @see TermQueryBuilder#TermQueryBuilder(String, Object)
+     */
+    public TermExtQueryBuilder(GetArrayPropertyFunction<T, P> getPropertyFunc, P value) {
+        String propertyName = CommonsHelper.getPropertyName(getPropertyFunc);
+        this.termQueryBuilder = new TermQueryBuilder(propertyName, getFilterValue(value));
+    }
 
     @Override
     public QueryBuilder build() {
