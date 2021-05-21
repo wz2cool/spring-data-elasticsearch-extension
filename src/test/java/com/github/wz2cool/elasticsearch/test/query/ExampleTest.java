@@ -217,6 +217,7 @@ public class ExampleTest {
                 .highlightMapping(TestExampleES::getP1, TestExampleES::setP1Hit)
                 .or(x -> x.match(TestExampleES::getP1, "aachurch1"))
                 .or(x -> x.match(TestExampleES::getP1, "fhurler0"))
+                .or(x-> x.wildcard(TestExampleES::getP1, "*a*"))
                 .orderBy(TestExampleES::getId, SortOrder.DESC);
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         System.out.println(JSON.toJSONString(testExampleES));
