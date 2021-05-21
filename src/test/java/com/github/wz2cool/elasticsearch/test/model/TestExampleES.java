@@ -12,19 +12,22 @@ public class TestExampleES {
 
     @Id
     private Long id;
-    @Field(type = FieldType.Text, analyzer = "")
+    @Field(type = FieldType.Text, analyzer = "hanlp_index")
     private String p1;
     private Integer p2;
     private Long p3;
     private Float p4;
     private Double p5;
+    @Field(type = FieldType.Date)
     private Date p6;
+    @Field(type = FieldType.Keyword)
+    private String p7;
 
     public TestExampleES() {
 
     }
 
-    public TestExampleES(Long id, String p1, Integer p2, Long p3, Float p4, Double p5, Date p6) {
+    public TestExampleES(Long id, String p1, Integer p2, Long p3, Float p4, Double p5, Date p6, String p7) {
         this.id = id;
         this.p1 = p1;
         this.p2 = p2;
@@ -32,6 +35,7 @@ public class TestExampleES {
         this.p4 = p4;
         this.p5 = p5;
         this.p6 = p6;
+        this.p7 = p7;
     }
 
     public String getP1() {
@@ -88,5 +92,13 @@ public class TestExampleES {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getP7() {
+        return p7;
+    }
+
+    public void setP7(String p7) {
+        this.p7 = p7;
     }
 }
