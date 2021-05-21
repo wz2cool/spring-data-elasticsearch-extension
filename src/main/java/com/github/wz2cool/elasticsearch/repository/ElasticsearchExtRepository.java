@@ -1,6 +1,6 @@
 package com.github.wz2cool.elasticsearch.repository;
 
-import com.github.wz2cool.elasticsearch.mapper.SelectByLogicPagingMapper;
+import com.github.wz2cool.elasticsearch.mapper.SelectByLogicPagingQueryMapper;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  */
 public interface ElasticsearchExtRepository<T, I> extends
         ElasticsearchRepository<T, I>,
-        SelectByLogicPagingMapper<T> {
+        SelectByLogicPagingQueryMapper<T> {
 }

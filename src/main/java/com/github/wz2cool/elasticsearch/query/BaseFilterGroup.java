@@ -45,7 +45,7 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
     public S andGroup(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
         if (enable) {
             FilterGroup<T> filterGroup = new FilterGroup<>();
-            booleanQueryBuilder.must(groupConsumer.apply(filterGroup).build());
+            booleanQueryBuilder.must(groupConsumer.apply(filterGroup).buildQuery());
         }
         return (S) this;
     }
@@ -57,12 +57,12 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
     public S orGroup(boolean enable, UnaryOperator<FilterGroup<T>> groupConsumer) {
         if (enable) {
             FilterGroup<T> filterGroup = new FilterGroup<>();
-            booleanQueryBuilder.should(groupConsumer.apply(filterGroup).build());
+            booleanQueryBuilder.should(groupConsumer.apply(filterGroup).buildQuery());
         }
         return (S) this;
     }
 
-    public QueryBuilder build() {
+    public QueryBuilder buildQuery() {
         return this.booleanQueryBuilder;
     }
 }

@@ -2,8 +2,7 @@ package com.github.wz2cool.elasticsearch.test.dao;
 
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
-import com.github.wz2cool.elasticsearch.repository.ElasticsearchExtRepository;
-import com.github.wz2cool.elasticsearch.test.mapper.StudentEsMapper;
+import com.github.wz2cool.elasticsearch.test.mapper.StudentEsQueryMapper;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,7 +14,7 @@ import java.util.Arrays;
 public class StudentEsDAO {
 
     @Resource
-    private StudentEsMapper studentEsMapper;
+    private StudentEsQueryMapper studentEsMapper;
     @Resource
     private ElasticsearchTemplate elasticsearchTemplate;
 

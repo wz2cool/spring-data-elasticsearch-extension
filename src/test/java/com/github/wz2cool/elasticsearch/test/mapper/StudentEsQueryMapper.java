@@ -4,5 +4,5 @@ import com.github.wz2cool.elasticsearch.repository.ElasticsearchExtRepository;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-public interface StudentEsMapper extends ElasticsearchExtRepository<StudentES, Long> {
+public interface StudentEsQueryMapper extends ElasticsearchExtRepository<StudentES, Long> {
 }

@@ -50,7 +50,7 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
     }
 
     public QueryBuilder getQueryBuilder() {
-        return queryBuilder != null ? queryBuilder : build();
+        return queryBuilder != null ? queryBuilder : buildQuery();
     }
 
     public void setQueryBuilder(QueryBuilder queryBuilder) {

@@ -23,7 +23,7 @@ import static com.github.wz2cool.elasticsearch.helper.CommonsHelper.getPropertyN
 /**
  * @author Frank
  **/
-public interface SelectByLogicPagingMapper<T> {
+public interface SelectByLogicPagingQueryMapper<T> {
 
     /**
      * select by logic paging

@@ -26,10 +26,7 @@ import java.util.List;
 @SpringBootTest
 @ContextConfiguration(classes = TestApplication.class)
 public class ElasticsearchExtRepositoryTest {
-
-    @Resource
-    private ElasticsearchTemplate elasticsearchTemplate;
-
+    
     @Resource
     private StudentEsDAO studentEsDAO;
 
@@ -80,7 +77,8 @@ public class ElasticsearchExtRepositoryTest {
     public void testLogicPaging3() {
         LogicPagingQuery<StudentES> query =
                 LogicPagingQuery.createQuery(StudentES.class, StudentES::getId, SortOrder.ASC, UpDown.NONE)
-                        .and(b -> b.multiMatchQuery("aaa", StudentES::getName, StudentES::getNameHit))
+                        .and(false, b -> b.multiMatchQuery("aaa", StudentES::getName, StudentES::getNameHit)
+                                .minimumShouldMatch("100%"))
                         .andGroup(g -> g
                                 .and(b -> b.rangeQuery(StudentES::getId).gt(3L))
                                 .and(b -> b.rangeQuery(StudentES::getId).lt(6L)))
