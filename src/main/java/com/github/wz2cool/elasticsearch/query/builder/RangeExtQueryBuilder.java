@@ -5,8 +5,6 @@ import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 
-import java.util.Date;
-
 /**
  * A Query that matches documents within an range of terms.
  *
@@ -110,13 +108,6 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
     public RangeExtQueryBuilder<T, P> relation(String relation) {
         rangeQueryBuilder.relation(relation);
         return this;
-    }
-
-    private Object getFilterValue(P value) {
-        if (value instanceof Date) {
-            return ((Date) value).getTime();
-        }
-        return value;
     }
 
     @Override

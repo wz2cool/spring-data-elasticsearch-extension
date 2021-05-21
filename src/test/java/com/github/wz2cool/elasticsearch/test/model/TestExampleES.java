@@ -1,13 +1,11 @@
 package com.github.wz2cool.elasticsearch.test.model;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Document(indexName = "test_example", type = "testExample")
@@ -26,11 +24,13 @@ public class TestExampleES {
     @Field(type = FieldType.Keyword)
     private String p7;
 
+    private BigDecimal p8;
+
     public TestExampleES() {
 
     }
 
-    public TestExampleES(Long id, String p1, Integer p2, Long p3, Float p4, Double p5, Date p6, String p7) {
+    public TestExampleES(Long id, String p1, Integer p2, Long p3, Float p4, Double p5, Date p6, String p7, BigDecimal p8) {
         this.id = id;
         this.p1 = p1;
         this.p2 = p2;
@@ -39,6 +39,7 @@ public class TestExampleES {
         this.p5 = p5;
         this.p6 = p6;
         this.p7 = p7;
+        this.p8 = p8;
     }
 
     public String getP1() {
@@ -103,5 +104,13 @@ public class TestExampleES {
 
     public void setP7(String p7) {
         this.p7 = p7;
+    }
+
+    public BigDecimal getP8() {
+        return p8;
+    }
+
+    public void setP8(BigDecimal p8) {
+        this.p8 = p8;
     }
 }

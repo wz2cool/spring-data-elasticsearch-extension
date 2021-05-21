@@ -2,6 +2,7 @@ package com.github.wz2cool.elasticsearch.query.builder;
 
 import com.github.wz2cool.elasticsearch.lambda.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ExtQueryBuilders<T> {
@@ -45,6 +46,10 @@ public class ExtQueryBuilders<T> {
     }
 
     public TermExtQueryBuilder<T, Date> termQuery(GetDatePropertyFunction<T> getPropertyFunc, Date value) {
+        return new TermExtQueryBuilder<>(getPropertyFunc, value);
+    }
+
+    public TermExtQueryBuilder<T, BigDecimal> termQuery(GetBigDecimalPropertyFunction<T> getPropertyFunc, BigDecimal value) {
         return new TermExtQueryBuilder<>(getPropertyFunc, value);
     }
 
