@@ -88,14 +88,4 @@ public class ElasticsearchExtRepositoryTest {
         final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
         System.out.println(JSON.toJSONString(studentESLogicPagingResult));
     }
-
-    @Test
-    public void testDynamicQuery() {
-        DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
-                .and(x -> x.rangeQuery(StudentES::getId).gt(5L).lt(10L))
-                .orderByScore(SortOrder.DESC)
-                .orderBy(StudentES::getId, SortOrder.DESC);
-        final List<StudentES> studentESList = studentEsDAO.selectByDynamicQuery(query);
-        System.out.println(JSON.toJSONString(studentESList));
-    }
 }

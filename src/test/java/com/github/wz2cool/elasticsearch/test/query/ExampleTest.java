@@ -1,6 +1,7 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
 import com.github.wz2cool.elasticsearch.helper.JSON;
+import com.github.wz2cool.elasticsearch.model.QueryMode;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
@@ -62,7 +63,7 @@ public class ExampleTest {
 
     @Test
     public void testTermInteger() {
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.termQuery(TestExampleES::getP2, 3));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(Integer.valueOf(3), testExampleES.get(0).getP2());
@@ -71,7 +72,7 @@ public class ExampleTest {
     @Test
     public void testTermLong() {
         Long target = 80L;
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.termQuery(TestExampleES::getP3, target));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(target, testExampleES.get(0).getP3());
@@ -80,7 +81,7 @@ public class ExampleTest {
     @Test
     public void testTermFloat() {
         Float target = 10.1f;
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.termQuery(TestExampleES::getP4, target));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(target, testExampleES.get(0).getP4());
@@ -89,7 +90,7 @@ public class ExampleTest {
     @Test
     public void testTermDouble() {
         Double target = 17.1d;
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.termQuery(TestExampleES::getP5, target));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(target, testExampleES.get(0).getP5());
@@ -98,7 +99,7 @@ public class ExampleTest {
     @Test
     public void testTermDate() {
         Date target = Date.valueOf("2020-09-10");
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.termQuery(TestExampleES::getP6, target));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(target.getTime(), testExampleES.get(0).getP6().getTime());
@@ -107,7 +108,7 @@ public class ExampleTest {
     @Test
     public void testTermString() {
         String target = "Zorina";
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.termQuery(TestExampleES::getP7, target));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(target, testExampleES.get(0).getP7());
@@ -116,7 +117,7 @@ public class ExampleTest {
     @Test
     public void testTermBigDecimal() {
         BigDecimal target = BigDecimal.valueOf(1.2);
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.termQuery(TestExampleES::getP8, target));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertEquals(target, testExampleES.get(0).getP8());
@@ -126,7 +127,7 @@ public class ExampleTest {
     public void testRangeInteger() {
         Integer from = 5;
         Integer to = 10;
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.rangeQuery(TestExampleES::getP2).gt(from).lt(to));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertFalse(testExampleES.isEmpty());
@@ -140,7 +141,7 @@ public class ExampleTest {
     public void testRangeBigDecimal() {
         BigDecimal from = BigDecimal.valueOf(1.5);
         BigDecimal to = BigDecimal.valueOf(2.1);
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.rangeQuery(TestExampleES::getP8).gt(from).lt(to));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertFalse(testExampleES.isEmpty());
@@ -154,7 +155,7 @@ public class ExampleTest {
     public void testRangeDate() {
         Date from = Date.valueOf("2020-12-22");
         Date to = Date.valueOf("2021-02-21");
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.rangeQuery(TestExampleES::getP6).gt(from).lt(to));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertFalse(testExampleES.isEmpty());
@@ -166,7 +167,7 @@ public class ExampleTest {
 
     @Test
     public void testMatch() {
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .highlightMapping(TestExampleES::getP1, TestExampleES::setP1Hit)
                 .and(x -> x.matchQuery(TestExampleES::getP1, "aachurch1"));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
@@ -176,7 +177,7 @@ public class ExampleTest {
 
     @Test
     public void testMutliMatch() {
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .highlightMapping(TestExampleES::getP1, TestExampleES::setP1Hit)
                 .and(x -> x.multiMatchQuery("aachurch1").field(TestExampleES::getP1));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
@@ -188,7 +189,7 @@ public class ExampleTest {
     public void testAnd() {
         BigDecimal from = BigDecimal.valueOf(1.5);
         BigDecimal to = BigDecimal.valueOf(2.1);
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.rangeQuery(TestExampleES::getP8).gt(from))
                 .and(x -> x.rangeQuery(TestExampleES::getP8).lt(to));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
@@ -201,7 +202,7 @@ public class ExampleTest {
 
     @Test
     public void testOr() {
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.QUERY)
                 .highlightMapping(TestExampleES::getP1, TestExampleES::setP1Hit)
                 .or(x -> x.matchQuery(TestExampleES::getP1, "aachurch1"))
                 .or(x -> x.matchQuery(TestExampleES::getP1, "fhurler0"))
@@ -216,7 +217,7 @@ public class ExampleTest {
     public void testGroup() {
         BigDecimal from = BigDecimal.valueOf(1.5);
         BigDecimal to = BigDecimal.valueOf(2.1);
-        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .andGroup(g -> g
                         .and(x -> x.rangeQuery(TestExampleES::getP8).gt(from))
                         .and(x -> x.rangeQuery(TestExampleES::getP8).lt(to)));

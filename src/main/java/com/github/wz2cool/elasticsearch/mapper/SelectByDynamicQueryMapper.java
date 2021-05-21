@@ -1,5 +1,6 @@
 package com.github.wz2cool.elasticsearch.mapper;
 
+import com.github.wz2cool.elasticsearch.model.QueryMode;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,11 @@ public interface SelectByDynamicQueryMapper<T> {
     default List<T> selectByDynamicQuery(
             ElasticsearchOperations elasticsearchOperations, DynamicQuery<T> dynamicQuery, int page, int pageSize) {
         NativeSearchQueryBuilder esQuery = new NativeSearchQueryBuilder();
-        esQuery.withQuery(dynamicQuery.buildQuery());
+        if (dynamicQuery.getQueryMode() == QueryMode.QUERY) {
+            esQuery.withQuery(dynamicQuery.buildQuery());
+        } else {
+            esQuery.withFilter(dynamicQuery.buildQuery());
+        }
         for (SortBuilder sortBuilder : dynamicQuery.getSortBuilders()) {
             esQuery.withSort(sortBuilder);
         }

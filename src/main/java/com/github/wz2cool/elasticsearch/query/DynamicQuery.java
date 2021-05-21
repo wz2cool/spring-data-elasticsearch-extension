@@ -4,6 +4,7 @@ import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetCommonPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.QueryMode;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.ScoreSortBuilder;
@@ -14,20 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+@SuppressWarnings("java:S3740")
 public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> {
 
     private final Class<T> clazz;
     private final HighlightResultMapper highlightResultMapper = new HighlightResultMapper();
     private final HighlightBuilder highlightBuilder = new HighlightBuilder();
     private final List<SortBuilder> sortBuilders = new ArrayList<>();
+    private final QueryMode queryMode;
 
-
-    private DynamicQuery(Class<T> clazz) {
+    private DynamicQuery(Class<T> clazz, QueryMode queryMode) {
         this.clazz = clazz;
+        this.queryMode = queryMode;
     }
 
-    public static <T> DynamicQuery<T> createQuery(Class<T> clazz) {
-        return new DynamicQuery<>(clazz);
+    public static <T> DynamicQuery<T> createQuery(Class<T> clazz, QueryMode queryMode) {
+        return new DynamicQuery<>(clazz, queryMode);
     }
 
     public DynamicQuery<T> scoreMapping(BiConsumer<T, Float> setScorePropertyFunc) {
@@ -82,5 +85,9 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> {
 
     public Class<T> getClazz() {
         return clazz;
+    }
+
+    public QueryMode getQueryMode() {
+        return queryMode;
     }
 }
