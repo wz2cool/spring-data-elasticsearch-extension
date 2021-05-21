@@ -25,6 +25,9 @@ public class TestExampleES {
     @Field(type = FieldType.Keyword)
     private String p7;
     private BigDecimal p8;
+
+    private Integer[] p9;
+
     @Transient
     private String p1Hit;
 
@@ -32,7 +35,7 @@ public class TestExampleES {
 
     }
 
-    public TestExampleES(Long id, String p1, Integer p2, Long p3, Float p4, Double p5, Date p6, String p7, BigDecimal p8) {
+    public TestExampleES(Long id, String p1, Integer p2, Long p3, Float p4, Double p5, Date p6, String p7, BigDecimal p8, Integer[] p9) {
         this.id = id;
         this.p1 = p1;
         this.p2 = p2;
@@ -42,6 +45,7 @@ public class TestExampleES {
         this.p6 = p6;
         this.p7 = p7;
         this.p8 = p8;
+        this.p9 = p9;
     }
 
     public String getP1() {
@@ -122,5 +126,13 @@ public class TestExampleES {
 
     public void setP1Hit(String p1Hit) {
         this.p1Hit = p1Hit;
+    }
+
+    public Integer[] getP9() {
+        return p9;
+    }
+
+    public void setP9(Integer[] p9) {
+        this.p9 = p9;
     }
 }
