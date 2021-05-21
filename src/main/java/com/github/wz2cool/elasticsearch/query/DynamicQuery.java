@@ -29,6 +29,10 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> {
         this.queryMode = queryMode;
     }
 
+    public static <T> DynamicQuery<T> createQuery(Class<T> clazz) {
+        return new DynamicQuery<>(clazz, QueryMode.QUERY);
+    }
+
     public static <T> DynamicQuery<T> createQuery(Class<T> clazz, QueryMode queryMode) {
         return new DynamicQuery<>(clazz, queryMode);
     }

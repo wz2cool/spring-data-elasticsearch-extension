@@ -3,6 +3,7 @@ package com.github.wz2cool.elasticsearch.mapper;
 import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
+import com.github.wz2cool.elasticsearch.model.QueryMode;
 import com.github.wz2cool.elasticsearch.model.SortDescriptor;
 import com.github.wz2cool.elasticsearch.model.UpDown;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
@@ -49,8 +50,11 @@ public interface SelectByLogicPagingQueryMapper<T> {
             boolQueryBuilder.must(mapEntry.getValue());
         }
         NativeSearchQueryBuilder esQuery = new NativeSearchQueryBuilder();
-        // no need query since no need calc score.
-        esQuery.withFilter(boolQueryBuilder);
+        if (logicPagingQuery.getQueryMode() == QueryMode.QUERY) {
+            esQuery.withQuery(boolQueryBuilder);
+        } else {
+            esQuery.withFilter(boolQueryBuilder);
+        }
         esQuery.withPageable(PageRequest.of(0, queryPageSize));
         esQuery.withSort(SortBuilders.fieldSort(getPropertyName(logicPagingQuery.getPagingPropertyFunc()))
                 .order(logicPagingQuery.getSortOrder()));

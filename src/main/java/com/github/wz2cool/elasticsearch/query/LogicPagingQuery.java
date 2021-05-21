@@ -4,6 +4,7 @@ import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetLongPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.QueryMode;
 import com.github.wz2cool.elasticsearch.model.UpDown;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -23,12 +24,18 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
     private Long lastEndPageId;
     private HighlightResultMapper highlightResultMapper = new HighlightResultMapper();
     private HighlightBuilder highlightBuilder = new HighlightBuilder();
+    private final QueryMode queryMode;
 
     private LogicPagingQuery(Class<T> clazz, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
+        this(clazz, QueryMode.QUERY, pagingPropertyFunc, sortOrder, upDown);
+    }
+
+    private LogicPagingQuery(Class<T> clazz, QueryMode queryMode, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
         this.clazz = clazz;
         this.upDown = upDown;
         this.sortOrder = sortOrder;
         this.pagingPropertyFunc = pagingPropertyFunc;
+        this.queryMode = queryMode;
     }
 
     public static <T> LogicPagingQuery<T> createQuery(
@@ -111,6 +118,10 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
 
     public void setHighlightBuilder(HighlightBuilder highlightBuilder) {
         this.highlightBuilder = highlightBuilder;
+    }
+
+    public QueryMode getQueryMode() {
+        return queryMode;
     }
 }
 
