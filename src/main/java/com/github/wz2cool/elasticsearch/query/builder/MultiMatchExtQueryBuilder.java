@@ -29,6 +29,51 @@ public class MultiMatchExtQueryBuilder<T> implements ExtQueryBuilder {
         return this;
     }
 
+    public MultiMatchExtQueryBuilder<T> minimumShouldMatch(String minimumShouldMatch) {
+        this.multiMatchQueryBuilder.minimumShouldMatch(minimumShouldMatch);
+        return this;
+    }
+
+    public MultiMatchExtQueryBuilder<T> analyzer(String analyzer) {
+        this.multiMatchQueryBuilder.analyzer(analyzer);
+        return this;
+    }
+
+    public MultiMatchExtQueryBuilder<T> slop(int slop) {
+        this.multiMatchQueryBuilder.slop(slop);
+        return this;
+    }
+
+    public MultiMatchExtQueryBuilder<T> fuzziness(String fuzziness) {
+        this.multiMatchQueryBuilder.fuzziness(fuzziness);
+        return this;
+    }
+
+    public MultiMatchExtQueryBuilder<T> fuzziness(int fuzziness) {
+        this.multiMatchQueryBuilder.fuzziness(fuzziness);
+        return this;
+    }
+
+    public MultiMatchExtQueryBuilder<T> prefixLength(int prefixLength) {
+        this.multiMatchQueryBuilder.prefixLength(prefixLength);
+        return this;
+    }
+
+    public MultiMatchExtQueryBuilder<T> tieBreaker(float tieBreaker) {
+        this.multiMatchQueryBuilder.tieBreaker(tieBreaker);
+        return this;
+    }
+
+    public MultiMatchExtQueryBuilder<T> cutoffFrequency(float cutoff) {
+        this.multiMatchQueryBuilder.cutoffFrequency(cutoff);
+        return this;
+    }
+
+    public MultiMatchExtQueryBuilder<T> fuzzyTranspositions(boolean fuzzyTranspositions) {
+        this.multiMatchQueryBuilder.fuzzyTranspositions(fuzzyTranspositions);
+        return this;
+    }
+
     @Override
     public QueryBuilder build() {
         return this.multiMatchQueryBuilder;
