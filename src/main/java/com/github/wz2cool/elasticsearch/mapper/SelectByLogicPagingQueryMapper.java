@@ -49,7 +49,8 @@ public interface SelectByLogicPagingQueryMapper<T> {
             boolQueryBuilder.must(mapEntry.getValue());
         }
         NativeSearchQueryBuilder esQuery = new NativeSearchQueryBuilder();
-        esQuery.withQuery(boolQueryBuilder);
+        // no need query since no need calc score.
+        esQuery.withFilter(boolQueryBuilder);
         esQuery.withPageable(PageRequest.of(0, queryPageSize));
         esQuery.withSort(SortBuilders.fieldSort(getPropertyName(logicPagingQuery.getPagingPropertyFunc()))
                 .order(logicPagingQuery.getSortOrder()));
