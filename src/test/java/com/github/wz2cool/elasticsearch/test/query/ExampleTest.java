@@ -5,8 +5,7 @@ import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
-import org.elasticsearch.index.query.MatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -183,5 +182,50 @@ public class ExampleTest {
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         System.out.println(JSON.toJSONString(testExampleES));
         assertEquals("aachurch1@wix.com", testExampleES.get(0).getP1());
+    }
+
+    @Test
+    public void testAnd() {
+        BigDecimal from = BigDecimal.valueOf(1.5);
+        BigDecimal to = BigDecimal.valueOf(2.1);
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(x -> x.rangeQuery(TestExampleES::getP8).gt(from))
+                .and(x -> x.rangeQuery(TestExampleES::getP8).lt(to));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertFalse(testExampleES.isEmpty());
+        for (TestExampleES testExample : testExampleES) {
+            boolean valid = testExample.getP8().compareTo(from) > 0 && testExample.getP8().compareTo(to) < 0;
+            assertTrue(valid);
+        }
+    }
+
+    @Test
+    public void testOr() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .highlightMapping(TestExampleES::getP1, TestExampleES::setP1Hit)
+                .or(x -> x.matchQuery(TestExampleES::getP1, "aachurch1"))
+                .or(x -> x.matchQuery(TestExampleES::getP1, "fhurler0"))
+                .orderBy(TestExampleES::getId, SortOrder.DESC);
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        System.out.println(JSON.toJSONString(testExampleES));
+        assertEquals("aachurch1@wix.com", testExampleES.get(0).getP1());
+        assertEquals("fhurler0@miibeian.gov.cn", testExampleES.get(1).getP1());
+    }
+
+    @Test
+    public void testGroup() {
+        BigDecimal from = BigDecimal.valueOf(1.5);
+        BigDecimal to = BigDecimal.valueOf(2.1);
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .andGroup(g -> g
+                        .and(x -> x.rangeQuery(TestExampleES::getP8).gt(from))
+                        .and(x -> x.rangeQuery(TestExampleES::getP8).lt(to)));
+
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        assertFalse(testExampleES.isEmpty());
+        for (TestExampleES testExample : testExampleES) {
+            boolean valid = testExample.getP8().compareTo(from) > 0 && testExample.getP8().compareTo(to) < 0;
+            assertTrue(valid);
+        }
     }
 }
