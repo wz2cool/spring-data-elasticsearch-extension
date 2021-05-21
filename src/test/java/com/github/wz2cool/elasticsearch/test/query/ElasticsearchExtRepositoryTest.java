@@ -26,6 +26,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = TestApplication.class)
+@SuppressWarnings("all")
 public class ElasticsearchExtRepositoryTest {
 
     @Resource
