@@ -117,7 +117,7 @@ public class ElasticsearchExtRepositoryTest {
     }
 
     @Test
-    public void testMultiDelete() {
+    public void testMultiDeleteById() {
         Long id = 999999L;
         StudentES studentES = new StudentES();
         studentES.setId(id);
