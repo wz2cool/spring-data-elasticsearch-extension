@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class StudentEsDAO {
@@ -28,11 +29,24 @@ public class StudentEsDAO {
         studentEsMapper.deleteAll();
     }
 
+    public void deleteByIds(Long... ids) {
+        final List<StudentES> collect = Arrays.stream(ids).map(x -> {
+            StudentES studentES = new StudentES();
+            studentES.setId(x);
+            return studentES;
+        }).collect(Collectors.toList());
+        studentEsMapper.deleteAll(collect);
+    }
+
     public LogicPagingResult<StudentES> selectByLogicPaging(LogicPagingQuery<StudentES> logicPagingQuery) {
         return studentEsMapper.selectByLogicPaging(elasticsearchTemplate, logicPagingQuery);
     }
 
     public List<StudentES> selectByDynamicQuery(DynamicQuery<StudentES> dynamicQuery) {
         return studentEsMapper.selectByDynamicQuery(elasticsearchTemplate, dynamicQuery);
+    }
+
+    public void deleteByDynamicQuery(DynamicQuery<StudentES> dynamicQuery) {
+        studentEsMapper.deleteByDynamicQuery(elasticsearchTemplate, dynamicQuery);
     }
 }

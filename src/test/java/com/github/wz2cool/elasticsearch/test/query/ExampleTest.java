@@ -233,7 +233,6 @@ public class ExampleTest {
                 .andGroup(g -> g
                         .and(x -> x.range(TestExampleES::getP8).gt(from))
                         .and(x -> x.range(TestExampleES::getP8).lt(to)));
-
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertFalse(testExampleES.isEmpty());
         for (TestExampleES testExample : testExampleES) {

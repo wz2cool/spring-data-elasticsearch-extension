@@ -3,6 +3,7 @@ package com.github.wz2cool.elasticsearch.test.query;
 import com.github.wz2cool.elasticsearch.helper.JSON;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.model.UpDown;
+import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
@@ -14,12 +15,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -29,6 +35,8 @@ public class ElasticsearchExtRepositoryTest {
 
     @Resource
     private StudentEsDAO studentEsDAO;
+    @Resource
+    private ElasticsearchTemplate elasticsearchTemplate;
 
     @Before
     public void init() {
@@ -86,5 +94,51 @@ public class ElasticsearchExtRepositoryTest {
                         .highlightMapping(StudentES::getName, StudentES::setNameHit);
         final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
         System.out.println(JSON.toJSONString(studentESLogicPagingResult));
+    }
+
+    @Test
+    public void testDelete() {
+        Long id = 999999L;
+        StudentES studentES = new StudentES();
+        studentES.setId(id);
+        studentES.setName("student");
+        studentES.setAge(20);
+        studentEsDAO.save(studentES);
+
+        DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
+                .and(x -> x.term(StudentES::getId, id));
+        final List<StudentES> studentES1 = studentEsDAO.selectByDynamicQuery(query);
+        assertEquals(id, studentES1.get(0).getId());
+        // call method
+        studentEsDAO.deleteByDynamicQuery(query);
+
+        final List<StudentES> studentES2 = studentEsDAO.selectByDynamicQuery(query);
+        assertTrue(studentES2.isEmpty());
+    }
+
+    @Test
+    public void testMultiDelete() {
+        Long id = 999999L;
+        StudentES studentES = new StudentES();
+        studentES.setId(id);
+        studentES.setName("student");
+        studentES.setAge(20);
+
+        Long id2 = 888888L;
+        StudentES studentES2 = new StudentES();
+        studentES2.setId(id2);
+        studentES2.setName("student");
+        studentES2.setAge(20);
+        studentEsDAO.save(studentES, studentES2);
+
+        DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
+                .and(x -> x.terms(StudentES::getId, id, id2));
+        final List<StudentES> studentESList1 = studentEsDAO.selectByDynamicQuery(query);
+        assertEquals(2, studentESList1.size());
+        // call method
+        studentEsDAO.deleteByDynamicQuery(query);
+
+        final List<StudentES> studentESList2 = studentEsDAO.selectByDynamicQuery(query);
+        assertTrue(studentESList2.isEmpty());
     }
 }

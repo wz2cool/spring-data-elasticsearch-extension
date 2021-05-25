@@ -15,6 +15,13 @@ import java.util.Optional;
 @SuppressWarnings("java:S3740")
 public interface SelectByDynamicQueryMapper<T> {
 
+    /**
+     * select by dynamic query
+     *
+     * @param elasticsearchOperations elasticsearch operations
+     * @param dynamicQuery            dynamic query
+     * @return query list
+     */
     default List<T> selectByDynamicQuery(ElasticsearchOperations elasticsearchOperations, DynamicQuery<T> dynamicQuery) {
         return selectByDynamicQuery(elasticsearchOperations, dynamicQuery, 0, 100);
     }
