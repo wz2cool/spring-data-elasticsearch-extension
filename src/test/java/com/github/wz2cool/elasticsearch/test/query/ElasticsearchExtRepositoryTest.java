@@ -140,4 +140,29 @@ public class ElasticsearchExtRepositoryTest {
         final List<StudentES> studentESList2 = studentEsDAO.selectByDynamicQuery(query);
         assertTrue(studentESList2.isEmpty());
     }
+
+    @Test
+    public void testLargeDeleteById() {
+        List<StudentES> studentList = new ArrayList<>();
+        List<Long> ids = new ArrayList<>();
+        for (long i = 100000000; i < 100000100; i++) {
+            ids.add(i);
+            StudentES studentES = new StudentES();
+            studentES.setId(i);
+            studentES.setName("testDeleteStudent" + i);
+            studentES.setAge(30);
+            studentList.add(studentES);
+        }
+        studentEsDAO.save(studentList.toArray(new StudentES[0]));
+        DynamicQuery<StudentES> query = DynamicQuery.createQuery(StudentES.class)
+                .and(x -> x.terms(StudentES::getId, ids.toArray(new Long[0])));
+
+        final List<StudentES> studentESList1 = studentEsDAO.selectByDynamicQuery(query);
+        assertEquals(100, studentESList1.size());
+        // call method
+        studentEsDAO.deleteByDynamicQuery(query);
+        final List<StudentES> studentESList2 = studentEsDAO.selectByDynamicQuery(query);
+        assertTrue(studentESList2.isEmpty());
+    }
+
 }
