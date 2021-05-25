@@ -7,7 +7,6 @@ import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 
 /**
  * @author Frank
- * @date 2021/05/25
  **/
 public interface DeleteByDynamicQueryMapper<T> {
 
