@@ -6,6 +6,8 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 
 /**
+ * https://www.elastic.co/guide/en/elasticsearch/client/java-rest/master/java-rest-high-document-delete-by-query.html
+ *
  * @author Frank
  **/
 public interface DeleteByDynamicQueryMapper<T> {
