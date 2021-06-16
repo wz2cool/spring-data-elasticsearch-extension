@@ -57,7 +57,7 @@ public interface SelectByLogicPagingQueryMapper<T> {
         }
         esQuery.withPageable(PageRequest.of(0, queryPageSize));
         esQuery.withSort(SortBuilders.fieldSort(getPropertyName(logicPagingQuery.getPagingPropertyFunc()))
-                .order(logicPagingQuery.getSortOrder()));
+                .order(mapEntry.getKey().getSortOrder()));
         esQuery.withHighlightBuilder(logicPagingQuery.getHighlightBuilder());
         Page<T> ts;
         final HighlightResultMapper highlightResultMapper = logicPagingQuery.getHighlightResultMapper();
