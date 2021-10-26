@@ -7,6 +7,7 @@ import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.StudentEsDAO;
+import com.github.wz2cool.elasticsearch.test.model.StudentDTO;
 import com.github.wz2cool.elasticsearch.test.model.StudentES;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -91,7 +92,16 @@ public class ElasticsearchExtRepositoryTest {
                                 .and(b -> b.range(StudentES::getId).lt(6L)))
                         .scoreMapping(StudentES::setScore)
                         .highlightMapping(StudentES::getName, StudentES::setNameHit);
-        final LogicPagingResult<StudentES> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query);
+        final LogicPagingResult<StudentDTO> studentESLogicPagingResult = studentEsDAO.selectByLogicPaging(query)
+                .convert(x -> {
+                    StudentDTO dto = new StudentDTO();
+                    dto.setAge(x.getAge());
+                    dto.setId(x.getId());
+                    dto.setName(x.getName());
+                    dto.setNameHit(x.getNameHit());
+                    dto.setScore(x.getScore());
+                    return dto;
+                });
         System.out.println(JSON.toJSONString(studentESLogicPagingResult));
     }
 
