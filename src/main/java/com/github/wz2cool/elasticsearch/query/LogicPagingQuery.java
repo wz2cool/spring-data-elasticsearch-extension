@@ -43,6 +43,11 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
         return new LogicPagingQuery<>(clazz, pagingPropertyFunc, sortOrder, upDown);
     }
 
+    public static <T> LogicPagingQuery<T> createQuery(
+            Class<T> clazz, QueryMode queryMode, GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, UpDown upDown) {
+        return new LogicPagingQuery<>(clazz, queryMode, pagingPropertyFunc, sortOrder, upDown);
+    }
+
     public LogicPagingQuery<T> scoreMapping(BiConsumer<T, Float> setScorePropertyFunc) {
         highlightResultMapper.registerScoreMapping(this.clazz, setScorePropertyFunc);
         return this;
