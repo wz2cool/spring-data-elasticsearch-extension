@@ -1,6 +1,7 @@
 package com.github.wz2cool.elasticsearch.test.query;
 
 import com.github.wz2cool.elasticsearch.helper.JSON;
+import com.github.wz2cool.elasticsearch.model.FilterMode;
 import com.github.wz2cool.elasticsearch.model.QueryMode;
 import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
@@ -245,6 +246,21 @@ public class ExampleTest {
     public void testTermsInteger() {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
                 .and(x -> x.terms(TestExampleES::getP9, 1, 10));
+        final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        System.out.println(JSON.toJSONString(testExampleES));
+        assertFalse(testExampleES.isEmpty());
+
+        for (TestExampleES testExample : testExampleES) {
+            boolean valid = ArrayUtils.contains(testExample.getP9(), 1) || ArrayUtils.contains(testExample.getP9(), 10);
+            assertTrue(valid);
+        }
+    }
+
+    @Test
+    public void testFilterMode() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .and(FilterMode.FILTER, x -> x.terms(TestExampleES::getP9, 1, 10))
+                .and(x -> x.terms(TestExampleES::getP9, 1, 2, 3, 4));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         System.out.println(JSON.toJSONString(testExampleES));
         assertFalse(testExampleES.isEmpty());
