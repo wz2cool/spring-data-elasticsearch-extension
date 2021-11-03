@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.wz2cool.elasticsearch.helper.ReflectHelper;
 import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import com.github.wz2cool.exception.PropertyNotFoundInternalException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Transient;
 
 import java.lang.reflect.Field;
@@ -62,8 +63,13 @@ public class EntityCache {
     }
 
     public String getColumnNameByProperty(Field field) {
-        if (field.isAnnotationPresent(JsonProperty.class)) {
-            return field.getAnnotation(JsonProperty.class).value();
+        if (field.isAnnotationPresent(org.springframework.data.elasticsearch.annotations.Field.class)) {
+            final String value = field.getAnnotation(org.springframework.data.elasticsearch.annotations.Field.class).value();
+            if (StringUtils.isNotBlank(value)) {
+                return value;
+            } else {
+                return field.getName();
+            }
         }
         return field.getName();
     }

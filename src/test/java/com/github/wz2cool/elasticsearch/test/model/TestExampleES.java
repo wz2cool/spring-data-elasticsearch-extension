@@ -1,6 +1,5 @@
 package com.github.wz2cool.elasticsearch.test.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -21,8 +20,7 @@ public class TestExampleES {
     private Long p3;
     private Float p4;
     private Double p5;
-    @Field(type = FieldType.Date)
-    @JsonProperty("p6")
+    @Field(name = "p6", type = FieldType.Date)
     private Date aliasP6;
     @Field(type = FieldType.Keyword)
     private String p7;

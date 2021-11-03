@@ -104,11 +104,7 @@ public class ExampleTest {
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
                 .and(x -> x.term(TestExampleES::getAliasP6, target));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
-      /*  assertEquals(target.getTime(), testExampleES.get(0).getAliasP6().getTime());*/
-
-        DynamicQuery<TestExampleES> query2 = DynamicQuery.createQuery(TestExampleES.class);
-        final List<TestExampleES> testExample2 = testExampleEsDAO.selectByDynamicQuery(query2);
-        System.out.println(testExample2);
+        assertEquals(target.getTime(), testExampleES.get(0).getAliasP6().getTime());
     }
 
     @Test
