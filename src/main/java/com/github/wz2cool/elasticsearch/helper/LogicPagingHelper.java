@@ -1,6 +1,8 @@
 package com.github.wz2cool.elasticsearch.helper;
 
+import com.github.wz2cool.elasticsearch.cache.EntityCache;
 import com.github.wz2cool.elasticsearch.lambda.GetLongPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
 import com.github.wz2cool.elasticsearch.model.SortDescriptor;
 import com.github.wz2cool.elasticsearch.model.UpDown;
@@ -20,8 +22,11 @@ public final class LogicPagingHelper {
     }
 
     public static <T> Map.Entry<SortDescriptor, QueryBuilder> getPagingSortFilterMap(
+            Class<T> clazz,
             GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, Long startPageId, Long endPageId, UpDown upDown) {
         String propertyName = CommonsHelper.getPropertyName(pagingPropertyFunc);
+        final ColumnInfo columnInfo = EntityCache.getInstance().getColumnInfo(clazz, propertyName);
+        final String columnName = columnInfo.getColumnName();
         SortDescriptor sortDescriptor = new SortDescriptor();
         sortDescriptor.setPropertyName(propertyName);
         sortDescriptor.setSortOrder(sortOrder);
@@ -34,7 +39,7 @@ public final class LogicPagingHelper {
             if (Objects.isNull(endPageId)) {
                 return resultMap;
             }
-            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(propertyName).gt(endPageId);
+            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(columnName).gt(endPageId);
             resultMap.setValue(rangeQueryBuilder);
             return resultMap;
         }
@@ -42,7 +47,7 @@ public final class LogicPagingHelper {
             if (Objects.isNull(endPageId)) {
                 return resultMap;
             }
-            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(propertyName).lt(endPageId);
+            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(columnName).lt(endPageId);
             resultMap.setValue(rangeQueryBuilder);
             return resultMap;
         }
@@ -50,7 +55,7 @@ public final class LogicPagingHelper {
             if (Objects.isNull(startPageId)) {
                 return resultMap;
             }
-            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(propertyName).lt(startPageId);
+            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(columnName).lt(startPageId);
             resultMap.setValue(rangeQueryBuilder);
             // need change direction
             resultMap.getKey().setSortOrder(SortOrder.DESC);
@@ -61,7 +66,7 @@ public final class LogicPagingHelper {
             if (Objects.isNull(startPageId)) {
                 return resultMap;
             }
-            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(propertyName).gt(startPageId);
+            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(columnName).gt(startPageId);
             // need change direction
             resultMap.getKey().setSortOrder(SortOrder.ASC);
             resultMap.setValue(rangeQueryBuilder);

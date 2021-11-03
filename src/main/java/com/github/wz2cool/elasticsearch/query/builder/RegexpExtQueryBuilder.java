@@ -1,7 +1,7 @@
 package com.github.wz2cool.elasticsearch.query.builder;
 
-import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetStringPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.RegexpQueryBuilder;
 
@@ -16,8 +16,8 @@ public class RegexpExtQueryBuilder<T> implements ExtQueryBuilder {
      * @see RegexpQueryBuilder#RegexpQueryBuilder(String, String)
      */
     public RegexpExtQueryBuilder(GetStringPropertyFunction<T> getPropertyFunc, String regexp) {
-        String propertyName = CommonsHelper.getPropertyName(getPropertyFunc);
-        this.regexpQueryBuilder = new RegexpQueryBuilder(propertyName, regexp);
+        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
+        this.regexpQueryBuilder = new RegexpQueryBuilder(columnInfo.getColumnName(), regexp);
     }
 
     @Override

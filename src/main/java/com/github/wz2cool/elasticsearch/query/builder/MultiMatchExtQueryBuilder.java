@@ -1,7 +1,7 @@
 package com.github.wz2cool.elasticsearch.query.builder;
 
-import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetStringPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -30,8 +30,8 @@ public class MultiMatchExtQueryBuilder<T> implements ExtQueryBuilder {
      * See also {@link MultiMatchQueryBuilder#field(String field)}
      */
     public MultiMatchExtQueryBuilder<T> field(GetStringPropertyFunction<T> getPropertyFunc) {
-        String propertyName = CommonsHelper.getPropertyName(getPropertyFunc);
-        this.multiMatchQueryBuilder.field(propertyName);
+        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
+        this.multiMatchQueryBuilder.field(columnInfo.getColumnName());
         return this;
     }
 
@@ -39,8 +39,8 @@ public class MultiMatchExtQueryBuilder<T> implements ExtQueryBuilder {
      * See also {@link MultiMatchQueryBuilder#field(String field, float boost)}
      */
     public MultiMatchExtQueryBuilder<T> field(GetStringPropertyFunction<T> getPropertyFunc, float boost) {
-        String propertyName = CommonsHelper.getPropertyName(getPropertyFunc);
-        this.multiMatchQueryBuilder.field(propertyName, boost);
+        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
+        this.multiMatchQueryBuilder.field(columnInfo.getColumnName(), boost);
         return this;
     }
 

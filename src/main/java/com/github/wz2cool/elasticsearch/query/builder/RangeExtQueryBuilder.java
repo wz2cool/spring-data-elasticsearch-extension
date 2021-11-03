@@ -1,7 +1,7 @@
 package com.github.wz2cool.elasticsearch.query.builder;
 
-import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 
@@ -18,8 +18,8 @@ public class RangeExtQueryBuilder<T, P extends Comparable> implements ExtQueryBu
      * @see RangeQueryBuilder#RangeQueryBuilder(String)
      */
     public RangeExtQueryBuilder(GetPropertyFunction<T, P> getPropertyFunc) {
-        String propertyName = CommonsHelper.getPropertyName(getPropertyFunc);
-        this.rangeQueryBuilder = new RangeQueryBuilder(propertyName);
+        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
+        this.rangeQueryBuilder = new RangeQueryBuilder(columnInfo.getColumnName());
     }
 
     /**

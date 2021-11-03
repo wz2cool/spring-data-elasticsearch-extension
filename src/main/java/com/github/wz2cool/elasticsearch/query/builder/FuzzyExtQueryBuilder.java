@@ -1,7 +1,7 @@
 package com.github.wz2cool.elasticsearch.query.builder;
 
-import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetStringPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import org.elasticsearch.index.query.FuzzyQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
@@ -18,8 +18,8 @@ public class FuzzyExtQueryBuilder<T> implements ExtQueryBuilder {
      * @see FuzzyQueryBuilder#FuzzyQueryBuilder(String, Object)
      */
     public FuzzyExtQueryBuilder(GetStringPropertyFunction<T> getPropertyFunc, String value) {
-        String propertyName = CommonsHelper.getPropertyName(getPropertyFunc);
-        this.fuzzyQueryBuilder = new FuzzyQueryBuilder(propertyName, value);
+        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
+        this.fuzzyQueryBuilder = new FuzzyQueryBuilder(columnInfo.getColumnName(), value);
     }
 
     @Override
