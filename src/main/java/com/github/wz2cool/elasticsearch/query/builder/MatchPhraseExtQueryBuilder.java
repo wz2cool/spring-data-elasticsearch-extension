@@ -1,7 +1,7 @@
 package com.github.wz2cool.elasticsearch.query.builder;
 
-import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetStringPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
@@ -19,8 +19,8 @@ public class MatchPhraseExtQueryBuilder<T> implements ExtQueryBuilder {
      * see also {@link MatchPhraseQueryBuilder#MatchPhraseQueryBuilder(String, Object)}
      */
     public MatchPhraseExtQueryBuilder(GetStringPropertyFunction<T> getPropertyFunc, String text) {
-        String propertyName = CommonsHelper.getPropertyName(getPropertyFunc);
-        this.matchPhraseQueryBuilder = new MatchPhraseQueryBuilder(propertyName, text);
+        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
+        this.matchPhraseQueryBuilder = new MatchPhraseQueryBuilder(columnInfo.getColumnName(), text);
     }
 
     /**

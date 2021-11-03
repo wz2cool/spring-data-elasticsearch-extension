@@ -1,9 +1,12 @@
 package com.github.wz2cool.elasticsearch.query;
 
+import com.github.wz2cool.elasticsearch.cache.EntityCache;
 import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetCommonPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
+import com.github.wz2cool.elasticsearch.model.PropertyInfo;
 import com.github.wz2cool.elasticsearch.model.QueryMode;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
@@ -44,8 +47,9 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> {
 
     public DynamicQuery<T> highlightMapping(GetPropertyFunction<T, String> getSearchPropertyFunc,
                                             BiConsumer<T, String> setHighLightPropertyFunc) {
-        String propertyName = CommonsHelper.getPropertyName(getSearchPropertyFunc);
-        highlightBuilder.field(propertyName);
+        final PropertyInfo propertyInfo = CommonsHelper.getPropertyInfo(getSearchPropertyFunc);
+        final ColumnInfo columnInfo = EntityCache.getInstance().getColumnInfo(propertyInfo.getOwnerClass(), propertyInfo.getPropertyName());
+        highlightBuilder.field(columnInfo.getColumnName());
         highlightResultMapper.registerHitMapping(this.clazz, getSearchPropertyFunc, setHighLightPropertyFunc);
         return this;
     }
@@ -68,8 +72,9 @@ public class DynamicQuery<T> extends BaseFilterGroup<T, DynamicQuery<T>> {
 
     public DynamicQuery<T> orderBy(boolean enable, GetCommonPropertyFunction<T> getPropertyFunc, SortOrder sortOrder) {
         if (enable) {
-            String propertyName = CommonsHelper.getPropertyName(getPropertyFunc);
-            final FieldSortBuilder order = new FieldSortBuilder(propertyName).order(sortOrder);
+            final PropertyInfo propertyInfo = CommonsHelper.getPropertyInfo(getPropertyFunc);
+            ColumnInfo columnInfo = EntityCache.getInstance().getColumnInfo(propertyInfo.getOwnerClass(), propertyInfo.getPropertyName());
+            final FieldSortBuilder order = new FieldSortBuilder(columnInfo.getColumnName()).order(sortOrder);
             this.sortBuilders.add(order);
         }
         return this;

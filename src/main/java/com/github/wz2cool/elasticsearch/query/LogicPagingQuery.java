@@ -1,9 +1,12 @@
 package com.github.wz2cool.elasticsearch.query;
 
+import com.github.wz2cool.elasticsearch.cache.EntityCache;
 import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetLongPropertyFunction;
 import com.github.wz2cool.elasticsearch.lambda.GetPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
+import com.github.wz2cool.elasticsearch.model.PropertyInfo;
 import com.github.wz2cool.elasticsearch.model.QueryMode;
 import com.github.wz2cool.elasticsearch.model.UpDown;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -55,8 +58,9 @@ public class LogicPagingQuery<T> extends BaseFilterGroup<T, LogicPagingQuery<T>>
 
     public LogicPagingQuery<T> highlightMapping(GetPropertyFunction<T, String> getSearchPropertyFunc,
                                                 BiConsumer<T, String> setHighLightPropertyFunc) {
-        String propertyName = CommonsHelper.getPropertyName(getSearchPropertyFunc);
-        highlightBuilder.field(propertyName);
+        PropertyInfo propertyInfo = CommonsHelper.getPropertyInfo(getSearchPropertyFunc);
+        ColumnInfo columnInfo = EntityCache.getInstance().getColumnInfo(propertyInfo.getOwnerClass(), propertyInfo.getPropertyName());
+        highlightBuilder.field(columnInfo.getColumnName());
         highlightResultMapper.registerHitMapping(this.clazz, getSearchPropertyFunc, setHighLightPropertyFunc);
         return this;
     }

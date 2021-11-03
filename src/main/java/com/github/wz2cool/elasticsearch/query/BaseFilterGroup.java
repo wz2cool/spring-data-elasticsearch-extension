@@ -6,7 +6,6 @@ import com.github.wz2cool.elasticsearch.query.builder.ExtQueryBuilders;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
-import javax.swing.plaf.PanelUI;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -33,6 +32,8 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
             final ExtQueryBuilder extQueryBuilder = filter.apply(extQueryBuilders);
             if (filterMode == FilterMode.MUST) {
                 booleanQueryBuilder.must(extQueryBuilder.build());
+            } else if (filterMode == FilterMode.MUST_NOT) {
+                booleanQueryBuilder.mustNot(extQueryBuilder.build());
             } else {
                 booleanQueryBuilder.filter(extQueryBuilder.build());
             }

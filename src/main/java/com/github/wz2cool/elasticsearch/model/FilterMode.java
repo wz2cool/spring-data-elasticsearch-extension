@@ -5,5 +5,6 @@ package com.github.wz2cool.elasticsearch.model;
  **/
 public enum FilterMode {
     MUST,
+    MUST_NOT,
     FILTER
 }

@@ -1,7 +1,7 @@
 package com.github.wz2cool.elasticsearch.query.builder;
 
-import com.github.wz2cool.elasticsearch.helper.CommonsHelper;
 import com.github.wz2cool.elasticsearch.lambda.GetStringPropertyFunction;
+import com.github.wz2cool.elasticsearch.model.ColumnInfo;
 import org.elasticsearch.index.query.PrefixQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
@@ -18,8 +18,8 @@ public class PrefixExtQueryBuilder<T> implements ExtQueryBuilder {
      * @see PrefixQueryBuilder#PrefixQueryBuilder(String, String)
      */
     public PrefixExtQueryBuilder(GetStringPropertyFunction<T> getPropertyFunc, String prefix) {
-        String propertyName = CommonsHelper.getPropertyName(getPropertyFunc);
-        this.prefixQueryBuilder = new PrefixQueryBuilder(propertyName, prefix);
+        final ColumnInfo columnInfo = getColumnInfo(getPropertyFunc);
+        this.prefixQueryBuilder = new PrefixQueryBuilder(columnInfo.getColumnName(), prefix);
     }
 
     @Override
