@@ -1,5 +1,6 @@
 package com.github.wz2cool.elasticsearch.test.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -21,7 +22,8 @@ public class TestExampleES {
     private Float p4;
     private Double p5;
     @Field(type = FieldType.Date)
-    private Date p6;
+    @JsonProperty("p6")
+    private Date aliasP6;
     @Field(type = FieldType.Keyword)
     private String p7;
     private BigDecimal p8;
@@ -35,14 +37,14 @@ public class TestExampleES {
 
     }
 
-    public TestExampleES(Long id, String p1, Integer p2, Long p3, Float p4, Double p5, Date p6, String p7, BigDecimal p8, Integer[] p9) {
+    public TestExampleES(Long id, String p1, Integer p2, Long p3, Float p4, Double p5, Date aliasP6, String p7, BigDecimal p8, Integer[] p9) {
         this.id = id;
         this.p1 = p1;
         this.p2 = p2;
         this.p3 = p3;
         this.p4 = p4;
         this.p5 = p5;
-        this.p6 = p6;
+        this.aliasP6 = aliasP6;
         this.p7 = p7;
         this.p8 = p8;
         this.p9 = p9;
@@ -88,12 +90,12 @@ public class TestExampleES {
         this.p5 = p5;
     }
 
-    public Date getP6() {
-        return p6;
+    public Date getAliasP6() {
+        return aliasP6;
     }
 
-    public void setP6(Date p6) {
-        this.p6 = p6;
+    public void setAliasP6(Date aliasP6) {
+        this.aliasP6 = aliasP6;
     }
 
     public Long getId() {

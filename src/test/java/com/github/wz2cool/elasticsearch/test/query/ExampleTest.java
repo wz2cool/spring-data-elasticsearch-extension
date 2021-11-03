@@ -102,9 +102,13 @@ public class ExampleTest {
     public void testTermDate() {
         Date target = Date.valueOf("2020-09-10");
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
-                .and(x -> x.term(TestExampleES::getP6, target));
+                .and(x -> x.term(TestExampleES::getAliasP6, target));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
-        assertEquals(target.getTime(), testExampleES.get(0).getP6().getTime());
+      /*  assertEquals(target.getTime(), testExampleES.get(0).getAliasP6().getTime());*/
+
+        DynamicQuery<TestExampleES> query2 = DynamicQuery.createQuery(TestExampleES.class);
+        final List<TestExampleES> testExample2 = testExampleEsDAO.selectByDynamicQuery(query2);
+        System.out.println(testExample2);
     }
 
     @Test
@@ -168,11 +172,11 @@ public class ExampleTest {
         Date from = Date.valueOf("2020-12-22");
         Date to = Date.valueOf("2021-02-21");
         DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class, QueryMode.FILTER)
-                .and(x -> x.range(TestExampleES::getP6).gt(from).lt(to));
+                .and(x -> x.range(TestExampleES::getAliasP6).gt(from).lt(to));
         final List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
         assertFalse(testExampleES.isEmpty());
         for (TestExampleES testExample : testExampleES) {
-            boolean valid = testExample.getP6().compareTo(from) > 0 && testExample.getP6().compareTo(to) < 0;
+            boolean valid = testExample.getAliasP6().compareTo(from) > 0 && testExample.getAliasP6().compareTo(to) < 0;
             assertTrue(valid);
         }
     }

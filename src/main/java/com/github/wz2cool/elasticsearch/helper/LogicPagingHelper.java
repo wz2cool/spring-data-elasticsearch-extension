@@ -2,10 +2,7 @@ package com.github.wz2cool.elasticsearch.helper;
 
 import com.github.wz2cool.elasticsearch.cache.EntityCache;
 import com.github.wz2cool.elasticsearch.lambda.GetLongPropertyFunction;
-import com.github.wz2cool.elasticsearch.model.ColumnInfo;
-import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
-import com.github.wz2cool.elasticsearch.model.SortDescriptor;
-import com.github.wz2cool.elasticsearch.model.UpDown;
+import com.github.wz2cool.elasticsearch.model.*;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
@@ -22,13 +19,12 @@ public final class LogicPagingHelper {
     }
 
     public static <T> Map.Entry<SortDescriptor, QueryBuilder> getPagingSortFilterMap(
-            Class<T> clazz,
             GetLongPropertyFunction<T> pagingPropertyFunc, SortOrder sortOrder, Long startPageId, Long endPageId, UpDown upDown) {
-        String propertyName = CommonsHelper.getPropertyName(pagingPropertyFunc);
-        final ColumnInfo columnInfo = EntityCache.getInstance().getColumnInfo(clazz, propertyName);
+        final PropertyInfo propertyInfo = CommonsHelper.getPropertyInfo(pagingPropertyFunc);
+        final ColumnInfo columnInfo = EntityCache.getInstance().getColumnInfo(propertyInfo.getOwnerClass(), propertyInfo.getPropertyName());
         final String columnName = columnInfo.getColumnName();
         SortDescriptor sortDescriptor = new SortDescriptor();
-        sortDescriptor.setPropertyName(propertyName);
+        sortDescriptor.setPropertyName(propertyInfo.getPropertyName());
         sortDescriptor.setSortOrder(sortOrder);
         Map.Entry<SortDescriptor, QueryBuilder> resultMap = new AbstractMap.SimpleEntry<>(sortDescriptor, null);
         if (Objects.isNull(startPageId) && Objects.isNull(endPageId)) {

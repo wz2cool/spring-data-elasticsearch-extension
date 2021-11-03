@@ -1,11 +1,9 @@
 package com.github.wz2cool.elasticsearch.mapper;
 
+import com.github.wz2cool.elasticsearch.cache.EntityCache;
 import com.github.wz2cool.elasticsearch.core.HighlightResultMapper;
 import com.github.wz2cool.elasticsearch.helper.LogicPagingHelper;
-import com.github.wz2cool.elasticsearch.model.LogicPagingResult;
-import com.github.wz2cool.elasticsearch.model.QueryMode;
-import com.github.wz2cool.elasticsearch.model.SortDescriptor;
-import com.github.wz2cool.elasticsearch.model.UpDown;
+import com.github.wz2cool.elasticsearch.model.*;
 import com.github.wz2cool.elasticsearch.query.LogicPagingQuery;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -19,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
+import static com.github.wz2cool.elasticsearch.helper.CommonsHelper.getPropertyInfo;
 import static com.github.wz2cool.elasticsearch.helper.CommonsHelper.getPropertyName;
 
 /**
@@ -56,7 +55,10 @@ public interface SelectByLogicPagingQueryMapper<T> {
             esQuery.withFilter(boolQueryBuilder);
         }
         esQuery.withPageable(PageRequest.of(0, queryPageSize));
-        esQuery.withSort(SortBuilders.fieldSort(getPropertyName(logicPagingQuery.getPagingPropertyFunc()))
+
+        final PropertyInfo propertyInfo = getPropertyInfo(logicPagingQuery.getPagingPropertyFunc());
+        final ColumnInfo columnInfo = EntityCache.getInstance().getColumnInfo(propertyInfo.getOwnerClass(), propertyInfo.getPropertyName());
+        esQuery.withSort(SortBuilders.fieldSort(columnInfo.getColumnName())
                 .order(mapEntry.getKey().getSortOrder()));
         esQuery.withHighlightBuilder(logicPagingQuery.getHighlightBuilder());
         Page<T> ts;
