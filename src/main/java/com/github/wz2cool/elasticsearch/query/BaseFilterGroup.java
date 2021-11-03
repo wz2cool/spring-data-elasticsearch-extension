@@ -1,10 +1,12 @@
 package com.github.wz2cool.elasticsearch.query;
 
+import com.github.wz2cool.elasticsearch.model.FilterMode;
 import com.github.wz2cool.elasticsearch.query.builder.ExtQueryBuilder;
 import com.github.wz2cool.elasticsearch.query.builder.ExtQueryBuilders;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
+import javax.swing.plaf.PanelUI;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -19,9 +21,21 @@ public abstract class BaseFilterGroup<T, S extends BaseFilterGroup<T, S>> {
     }
 
     public S and(boolean enable, Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
+        return and(enable, FilterMode.MUST, filter);
+    }
+
+    public S and(FilterMode filterMode, Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
+        return and(true, filterMode, filter);
+    }
+
+    public S and(boolean enable, FilterMode filterMode, Function<ExtQueryBuilders<T>, ExtQueryBuilder> filter) {
         if (enable) {
             final ExtQueryBuilder extQueryBuilder = filter.apply(extQueryBuilders);
-            booleanQueryBuilder.must(extQueryBuilder.build());
+            if (filterMode == FilterMode.MUST) {
+                booleanQueryBuilder.must(extQueryBuilder.build());
+            } else {
+                booleanQueryBuilder.filter(extQueryBuilder.build());
+            }
         }
         return (S) this;
     }
