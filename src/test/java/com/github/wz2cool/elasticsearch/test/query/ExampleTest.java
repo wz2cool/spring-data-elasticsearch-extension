@@ -7,6 +7,7 @@ import com.github.wz2cool.elasticsearch.query.DynamicQuery;
 import com.github.wz2cool.elasticsearch.test.TestApplication;
 import com.github.wz2cool.elasticsearch.test.dao.TestExampleEsDAO;
 import com.github.wz2cool.elasticsearch.test.model.TestExampleES;
+import com.sun.xml.internal.fastinfoset.tools.XML_DOM_FI;
 import org.apache.commons.lang3.ArrayUtils;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Before;
@@ -57,8 +58,9 @@ public class ExampleTest {
         data.add(new TestExampleES(15L, "cfrankcome@virginia.edu", 15, 150L, 15.1f, 2.6d, Date.valueOf("2020-10-16"), "Zorina", BigDecimal.valueOf(2.5), new Integer[]{7, 8, 9}));
         data.add(new TestExampleES(16L, "gokeyg@who.int", 16, 160L, 1.1f, 16.1d, Date.valueOf("2021-04-26"), "Dore", BigDecimal.valueOf(2.6), new Integer[]{7, 8, 9}));
         data.add(new TestExampleES(17L, "nabryh@privacy.gov.au", 17, 170L, 17.1f, 17.1d, Date.valueOf("2020-09-10"), "Abbott", BigDecimal.valueOf(2.7), new Integer[]{7, 8, 9}));
-        data.add(new TestExampleES(19L, "wsimoesi@so-net.ne.jp", 18, 180L, 18.1f, 18.1d, Date.valueOf("2020-08-16"), "Eugenius", BigDecimal.valueOf(2.8), new Integer[]{7, 8, 9}));
-        data.add(new TestExampleES(20L, "maltamiranoj@blogs.com", 19, 190L, 19.1f, 19.1d, Date.valueOf("2020-07-09"), "Benetta", BigDecimal.valueOf(2.9), new Integer[]{7, 8, 9}));
+        data.add(new TestExampleES(18L, "wsimoesi@so-net.ne.jp", 18, 180L, 18.1f, 18.1d, Date.valueOf("2020-08-16"), "Eugenius", BigDecimal.valueOf(2.8), new Integer[]{7, 8, 9}));
+        data.add(new TestExampleES(19L, "wsimoesi@so-net.ne.jp", 19, 180L, 18.1f, 18.1d, Date.valueOf("2020-08-16"), "Eugenius", BigDecimal.valueOf(2.8), new Integer[]{7, 8, 9}));
+        data.add(new TestExampleES(20L, "maltamiranoj@blogs.com", 20, 190L, 19.1f, 19.1d, Date.valueOf("2020-07-09"), "Benetta", BigDecimal.valueOf(2.9), new Integer[]{7, 8, 9}));
         testExampleEsDAO.save(data);
     }
 
@@ -269,5 +271,24 @@ public class ExampleTest {
             boolean valid = ArrayUtils.contains(testExample.getP9(), 1) || ArrayUtils.contains(testExample.getP9(), 10);
             assertTrue(valid);
         }
+    }
+
+    @Test
+    public void testFilterModeForGroup() {
+        DynamicQuery<TestExampleES> query = DynamicQuery.createQuery(TestExampleES.class)
+                .andGroup(FilterMode.MUST_NOT, g -> g
+                        .and(x -> x.term(TestExampleES::getId, 1L))
+                        .and(x -> x.term(TestExampleES::getP2, 2)));
+        List<TestExampleES> testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        // 未找到排除项，所以都保存
+        assertEquals(20, testExampleES.size());
+
+        query = DynamicQuery.createQuery(TestExampleES.class)
+                .andGroup(FilterMode.MUST_NOT, g -> g
+                        .and(x -> x.term(TestExampleES::getId, 1L))
+                        .and(x -> x.term(TestExampleES::getP2, 1)));
+        testExampleES = testExampleEsDAO.selectByDynamicQuery(query);
+        // 找到一条并排除
+        assertEquals(19, testExampleES.size());
     }
 }
